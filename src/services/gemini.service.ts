@@ -28,14 +28,22 @@ export class GeminiService {
   }
 
   private async fileToGenerativePart(file: File) {
-    const base64EncodedDataPromise = new Promise<string>((resolve) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve((reader.result as string).split(',')[1]);
-      reader.readAsDataURL(file);
-    });
-    return {
-      inlineData: { data: await base64EncodedDataPromise, mimeType: file.type },
-    };
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const bytes = new Uint8Array(arrayBuffer);
+      let binary = '';
+      const len = bytes.byteLength;
+      for (let i = 0; i < len; i++) {
+          binary += String.fromCharCode(bytes[i]);
+      }
+      const base64EncodedData = btoa(binary);
+      
+      return {
+        inlineData: { data: base64EncodedData, mimeType: file.type },
+      };
+    } catch (error: any) {
+      throw new Error(`Failed to process image file: ${error?.message || 'Unknown error'}`);
+    }
   }
 
   /**
@@ -47,7 +55,7 @@ export class GeminiService {
       return; // No need to check empty strings
     }
 
-    const model = 'gemini-2.5-flash';
+    const model = 'gemini-3-flash-preview';
     const safetyPrompt = `You are a content safety moderator. Analyze the following text to determine if it contains any explicit, harassing, hateful, threatening, or otherwise inappropriate content that violates community guidelines. Respond with only a JSON object. The object must have a key "inappropriate" (boolean) and, if true, a "reason" (string).
 
 Text to analyze: "${text}"`;
@@ -87,9 +95,11 @@ Text to analyze: "${text}"`;
   }
 
 
-  async getTextFromImage(image: File): Promise<string> {
-    const model = 'gemini-2.5-flash';
-    const imagePart = await this.fileToGenerativePart(image);
+  async getTextFromImageData(base64Data: string, mimeType: string): Promise<string> {
+    const model = 'gemini-3-flash-preview';
+    const imagePart = {
+      inlineData: { data: base64Data, mimeType },
+    };
     const prompt = "Extract all text from the provided image, which is a screenshot of a chat. Focus on transcribing the last message sent by the other person. Return only the transcribed text, without any additional comments, labels, or explanations.";
 
     try {
@@ -97,26 +107,31 @@ Text to analyze: "${text}"`;
         model,
         contents: { parts: [imagePart, { text: prompt }] },
       });
+      
+      if (!response.text) {
+        throw new Error('No text could be extracted from the image. It might be blocked by safety filters.');
+      }
+      
       const extractedText = response.text.trim();
 
       // Safety Check
       await this.checkForInappropriateContent(extractedText);
       
       return extractedText;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error processing image:', error);
-      if (error instanceof Error && error.message.includes('inappropriate')) {
+      if (error?.message?.includes('inappropriate') || error?.message?.includes('safety')) {
         throw error; // Re-throw the specific safety error
       }
-      throw new Error('Could not process the screenshot. It may be unreadable or contain inappropriate content.');
+      throw new Error(`Could not process the screenshot. Error: ${error?.message || 'Unknown error'}`);
     }
   }
 
-  async generateReplies(userInput: string, image?: File | null, history?: any[]): Promise<ApiResponse> {
+  async generateReplies(userInput: string, imageData?: { base64Data: string, mimeType: string } | null, history?: any[]): Promise<ApiResponse> {
     // Safety Check on user's direct text input
     await this.checkForInappropriateContent(userInput);
 
-    const model = 'gemini-2.5-flash';
+    const model = 'gemini-3-flash-preview';
 
     const systemPrompt = `You are "Desi Wingman," an expert dating coach for the modern Bangladeshi dating scene. You are witty, culturally aware, and act as a supportive friend. Your goal is to help the user with replies for Tinder, Bumble, etc.
 
@@ -167,8 +182,10 @@ The user has provided the following context. Analyze it and generate the 3 reply
       contents.push({ text: historyText });
     }
 
-    if (image) {
-      const imagePart = await this.fileToGenerativePart(image);
+    if (imageData) {
+      const imagePart = {
+        inlineData: { data: imageData.base64Data, mimeType: imageData.mimeType },
+      };
       contents.push(imagePart);
     }
 
@@ -176,7 +193,7 @@ The user has provided the following context. Analyze it and generate the 3 reply
       contents.push({ text: `Her CURRENT message text: "${userInput}"`});
     }
 
-    if (image && !userInput) {
+    if (imageData && !userInput) {
         contents.push({ text: "Analyze the CURRENT screenshot and provide replies to the last message from her."});
     }
 
