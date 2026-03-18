@@ -1,8 +1,9 @@
 
-import { Component, ChangeDetectionStrategy, signal, inject, ElementRef, viewChild } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, inject, ElementRef, viewChild, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GeminiService, ApiResponse } from './services/gemini.service';
+import { HistoryService, HistoryItem } from './services/history.service';
 
 @Component({
   selector: 'app-root',
@@ -11,8 +12,9 @@ import { GeminiService, ApiResponse } from './services/gemini.service';
   templateUrl: './app.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   private geminiService = inject(GeminiService);
+  private historyService = inject(HistoryService);
 
   userInput = signal('');
   uploadedImage = signal<{ file: File | null; previewUrl: string | null }>({ file: null, previewUrl: null });
@@ -26,6 +28,36 @@ export class AppComponent {
   isCameraOpen = signal(false);
   videoElement = viewChild<ElementRef<HTMLVideoElement>>('videoElement');
   private stream: MediaStream | null = null;
+
+  showHistory = signal(false);
+  historyItems = signal<HistoryItem[]>([]);
+
+  ngOnInit() {
+    this.loadHistory();
+  }
+
+  async loadHistory() {
+    try {
+      const items = await this.historyService.getHistory();
+      this.historyItems.set(items);
+    } catch (e) {
+      console.error('Failed to load history', e);
+    }
+  }
+
+  toggleHistory() {
+    this.showHistory.set(!this.showHistory());
+    if (this.showHistory()) {
+      this.loadHistory();
+    }
+  }
+
+  async clearHistory() {
+    if (confirm('Are you sure you want to clear all history?')) {
+      await this.historyService.clearHistory();
+      this.historyItems.set([]);
+    }
+  }
 
   onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -141,9 +173,24 @@ export class AppComponent {
     try {
       const result = await this.geminiService.generateReplies(
         this.userInput(),
-        this.uploadedImage().file
+        this.uploadedImage().file,
+        this.historyItems()
       );
       this.responses.set(result);
+      
+      // Save to history
+      try {
+        await this.historyService.saveHistory({
+          timestamp: Date.now(),
+          userInput: this.userInput(),
+          imagePreviewUrl: this.uploadedImage().previewUrl,
+          responses: result
+        });
+        this.loadHistory(); // Refresh history list
+      } catch (e) {
+        console.error('Failed to save history', e);
+      }
+      
     } catch (e: any) {
       this.error.set(e.message || 'An unknown error occurred.');
     } finally {

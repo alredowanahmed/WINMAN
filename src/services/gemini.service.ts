@@ -112,7 +112,7 @@ Text to analyze: "${text}"`;
     }
   }
 
-  async generateReplies(userInput: string, image?: File | null): Promise<ApiResponse> {
+  async generateReplies(userInput: string, image?: File | null, history?: any[]): Promise<ApiResponse> {
     // Safety Check on user's direct text input
     await this.checkForInappropriateContent(userInput);
 
@@ -150,17 +150,34 @@ The user has provided the following context. Analyze it and generate the 3 reply
     
     const contents: any[] = [{ text: systemPrompt }];
     
+    // Add history context if available
+    if (history && history.length > 0) {
+      let historyText = "--- PAST CONVERSATION HISTORY (Context for you to remember) ---\n";
+      // Take up to the last 4 interactions to give context without overloading
+      const recentHistory = history.slice(0, 4).reverse();
+      for (const item of recentHistory) {
+        if (item.userInput) {
+          historyText += `She previously said: "${item.userInput}"\n`;
+        } else {
+          historyText += `User previously uploaded a screenshot.\n`;
+        }
+        historyText += `You suggested: ${item.responses.options.map((o: any) => o.reply).join(' | ')}\n\n`;
+      }
+      historyText += "--- END OF HISTORY ---\nKeep this past context in mind to ensure continuity and avoid repeating the exact same jokes if this is the same conversation.\n\n";
+      contents.push({ text: historyText });
+    }
+
     if (image) {
       const imagePart = await this.fileToGenerativePart(image);
       contents.push(imagePart);
     }
 
     if (userInput) {
-      contents.push({ text: `Her message text: "${userInput}"`});
+      contents.push({ text: `Her CURRENT message text: "${userInput}"`});
     }
 
     if (image && !userInput) {
-        contents.push({ text: "Analyze the screenshot and provide replies to the last message from her."});
+        contents.push({ text: "Analyze the CURRENT screenshot and provide replies to the last message from her."});
     }
 
     try {
