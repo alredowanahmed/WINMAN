@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { GoogleGenAI, GenerateContentResponse, Type } from '@google/genai';
-import { environment } from '../environments/environment';
 
 export interface ReplyOption {
   title: string;
@@ -18,7 +17,7 @@ export class GeminiService {
   private ai: GoogleGenAI;
 
   constructor() {
-    const apiKey = environment.apiKey;
+    const apiKey = GEMINI_API_KEY;
     if (!apiKey) {
       // In a real app, you'd have a more robust way to handle this,
       // but for this environment, we throw an error to indicate a fatal misconfiguration.
