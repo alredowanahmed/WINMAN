@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
+  "buildCommand": "rm -rf dist && npm run build",
   "outputDirectory": "dist",
   "rewrites": [
     {
