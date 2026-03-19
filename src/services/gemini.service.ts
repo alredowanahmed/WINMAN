@@ -103,7 +103,8 @@ Text to analyze: "${text}"`;
       if (error instanceof Error && error.message.includes('inappropriate')) {
         throw error; // Re-throw the specific safety error
       }
-      throw new Error('Could not process the screenshot. It may be unreadable or contain inappropriate content.');
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      throw new Error(`Could not process the screenshot: ${errorMessage}`);
     }
   }
 
