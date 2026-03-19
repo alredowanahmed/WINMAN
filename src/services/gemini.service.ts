@@ -27,14 +27,9 @@ export class GeminiService {
     this.ai = new GoogleGenAI({ apiKey });
   }
 
-  private async fileToGenerativePart(file: File) {
-    const base64EncodedDataPromise = new Promise<string>((resolve) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve((reader.result as string).split(',')[1]);
-      reader.readAsDataURL(file);
-    });
+  private dataToGenerativePart(base64Data: string, mimeType: string) {
     return {
-      inlineData: { data: await base64EncodedDataPromise, mimeType: file.type },
+      inlineData: { data: base64Data, mimeType: mimeType },
     };
   }
 
@@ -87,9 +82,9 @@ Text to analyze: "${text}"`;
   }
 
 
-  async getTextFromImage(image: File): Promise<string> {
+  async getTextFromImage(base64Data: string, mimeType: string): Promise<string> {
     const model = 'gemini-2.5-flash';
-    const imagePart = await this.fileToGenerativePart(image);
+    const imagePart = this.dataToGenerativePart(base64Data, mimeType);
     const prompt = "Extract all text from the provided image, which is a screenshot of a chat. Focus on transcribing the last message sent by the other person. Return only the transcribed text, without any additional comments, labels, or explanations.";
 
     try {
@@ -112,7 +107,7 @@ Text to analyze: "${text}"`;
     }
   }
 
-  async generateReplies(userInput: string, image?: File | null, history?: any[]): Promise<ApiResponse> {
+  async generateReplies(userInput: string, base64Data?: string | null, mimeType?: string | null, history?: any[]): Promise<ApiResponse> {
     // Safety Check on user's direct text input
     await this.checkForInappropriateContent(userInput);
 
@@ -167,8 +162,8 @@ The user has provided the following context. Analyze it and generate the 3 reply
       contents.push({ text: historyText });
     }
 
-    if (image) {
-      const imagePart = await this.fileToGenerativePart(image);
+    if (base64Data && mimeType) {
+      const imagePart = this.dataToGenerativePart(base64Data, mimeType);
       contents.push(imagePart);
     }
 
@@ -176,7 +171,7 @@ The user has provided the following context. Analyze it and generate the 3 reply
       contents.push({ text: `Her CURRENT message text: "${userInput}"`});
     }
 
-    if (image && !userInput) {
+    if (base64Data && !userInput) {
         contents.push({ text: "Analyze the CURRENT screenshot and provide replies to the last message from her."});
     }
 

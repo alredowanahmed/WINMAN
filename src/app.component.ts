@@ -76,25 +76,30 @@ export class AppComponent implements OnInit {
     // Show preview immediately
     const reader = new FileReader();
     reader.onload = (e: any) => {
-      this.uploadedImage.set({ file, previewUrl: e.target.result });
+      const previewUrl = e.target.result as string;
+      this.uploadedImage.set({ file, previewUrl });
+
+      // Start text extraction
+      this.isExtractingText.set(true);
+      
+      // Extract base64 part from previewUrl
+      const base64Data = previewUrl.split(',')[1];
+      
+      this.geminiService.getTextFromImage(base64Data, file.type)
+        .then(extractedText => {
+          this.userInput.set(extractedText);
+        })
+        .catch(e => {
+          this.error.set(e.message || 'Failed to extract text from image.');
+          this.uploadedImage.set({ file: null, previewUrl: null }); // Clear preview on error
+          const fileInput = document.getElementById('file-upload') as HTMLInputElement;
+          if (fileInput) fileInput.value = '';
+        })
+        .finally(() => {
+          this.isExtractingText.set(false);
+        });
     };
     reader.readAsDataURL(file);
-
-    // Start text extraction
-    this.isExtractingText.set(true);
-    this.geminiService.getTextFromImage(file)
-      .then(extractedText => {
-        this.userInput.set(extractedText);
-      })
-      .catch(e => {
-        this.error.set(e.message || 'Failed to extract text from image.');
-        this.uploadedImage.set({ file: null, previewUrl: null }); // Clear preview on error
-        const fileInput = document.getElementById('file-upload') as HTMLInputElement;
-        if (fileInput) fileInput.value = '';
-      })
-      .finally(() => {
-        this.isExtractingText.set(false);
-      });
   }
 
   async openCamera(): Promise<void> {
@@ -171,9 +176,19 @@ export class AppComponent implements OnInit {
     this.copiedState.set({});
 
     try {
+      const file = this.uploadedImage().file;
+      let base64Data: string | null = null;
+      let mimeType: string | null = null;
+      
+      if (file && this.uploadedImage().previewUrl) {
+          base64Data = this.uploadedImage().previewUrl!.split(',')[1];
+          mimeType = file.type;
+      }
+
       const result = await this.geminiService.generateReplies(
         this.userInput(),
-        this.uploadedImage().file,
+        base64Data,
+        mimeType,
         this.historyItems()
       );
       this.responses.set(result);
