@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
   private historyService = inject(HistoryService);
 
   userInput = signal('');
-  uploadedImage = signal<{ file: File | null; previewUrl: string | null; base64Data?: string }>({ file: null, previewUrl: null });
+  uploadedImage = signal<{ file: File | null; previewUrl: string | null }>({ file: null, previewUrl: null });
   isLoading = signal(false);
   isExtractingText = signal(false);
   error = signal<string | null>(null);
@@ -73,32 +73,28 @@ export class AppComponent implements OnInit {
     this.responses.set(null);
     this.copiedState.set({});
 
+    // Show preview immediately
     const reader = new FileReader();
     reader.onload = (e: any) => {
-      const dataUrl = e.target.result as string;
-      const base64Data = dataUrl.split(',')[1];
-      this.uploadedImage.set({ file, previewUrl: dataUrl, base64Data });
-
-      // Start text extraction
-      this.isExtractingText.set(true);
-      this.geminiService.getTextFromImageData(base64Data, file.type)
-        .then(extractedText => {
-          this.userInput.set(extractedText);
-        })
-        .catch(err => {
-          this.error.set(err.message || 'Failed to extract text from image.');
-          this.uploadedImage.set({ file: null, previewUrl: null }); // Clear preview on error
-          const fileInput = document.getElementById('file-upload') as HTMLInputElement;
-          if (fileInput) fileInput.value = '';
-        })
-        .finally(() => {
-          this.isExtractingText.set(false);
-        });
-    };
-    reader.onerror = () => {
-      this.error.set('Failed to read the uploaded file.');
+      this.uploadedImage.set({ file, previewUrl: e.target.result });
     };
     reader.readAsDataURL(file);
+
+    // Start text extraction
+    this.isExtractingText.set(true);
+    this.geminiService.getTextFromImage(file)
+      .then(extractedText => {
+        this.userInput.set(extractedText);
+      })
+      .catch(e => {
+        this.error.set(e.message || 'Failed to extract text from image.');
+        this.uploadedImage.set({ file: null, previewUrl: null }); // Clear preview on error
+        const fileInput = document.getElementById('file-upload') as HTMLInputElement;
+        if (fileInput) fileInput.value = '';
+      })
+      .finally(() => {
+        this.isExtractingText.set(false);
+      });
   }
 
   async openCamera(): Promise<void> {
@@ -175,12 +171,9 @@ export class AppComponent implements OnInit {
     this.copiedState.set({});
 
     try {
-      const imgState = this.uploadedImage();
-      const imageData = imgState.base64Data && imgState.file ? { base64Data: imgState.base64Data, mimeType: imgState.file.type } : null;
-      
       const result = await this.geminiService.generateReplies(
         this.userInput(),
-        imageData,
+        this.uploadedImage().file,
         this.historyItems()
       );
       this.responses.set(result);

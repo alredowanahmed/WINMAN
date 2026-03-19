@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "ng serve",
-    "build": "ng build",
-    "preview": "ng serve --configuration=production"
+    "dev": "node set-env.js && ng serve",
+    "build": "node set-env.js && ng build",
+    "preview": "node set-env.js && ng serve --configuration=production"
   },
   "dependencies": {
     "rxjs": "^7.8.2",
@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
-    "typescript": "~5.9.0",
+    "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }
 }

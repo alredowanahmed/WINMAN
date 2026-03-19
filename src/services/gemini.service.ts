@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GoogleGenAI, GenerateContentResponse, Type } from '@google/genai';
+import { environment } from '../environments/environment';
 
 export interface ReplyOption {
   title: string;
@@ -14,56 +15,45 @@ export interface ApiResponse {
   providedIn: 'root',
 })
 export class GeminiService {
-  private ai: GoogleGenAI | null = null;
+  private ai: GoogleGenAI;
 
   constructor() {
-    const apiKey = (import.meta as any).env.GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+    const apiKey = environment.apiKey;
     if (!apiKey) {
-      console.error("API_KEY environment variable not set.");
-    } else {
-      this.ai = new GoogleGenAI({ apiKey });
+      // In a real app, you'd have a more robust way to handle this,
+      // but for this environment, we throw an error to indicate a fatal misconfiguration.
+      throw new Error("API_KEY environment variable not set.");
     }
-  }
-
-  private async ensureAiInitialized(): Promise<GoogleGenAI> {
-    if (!this.ai) {
-      throw new Error("Gemini API key is not set. Please configure the GEMINI_API_KEY environment variable.");
-    }
-    return this.ai;
+    this.ai = new GoogleGenAI({ apiKey });
   }
 
   private async fileToGenerativePart(file: File) {
-    try {
-      const arrayBuffer = await file.arrayBuffer();
-      const bytes = new Uint8Array(arrayBuffer);
-      let binary = '';
-      const len = bytes.byteLength;
-      for (let i = 0; i < len; i++) {
-          binary += String.fromCharCode(bytes[i]);
-      }
-      const base64EncodedData = btoa(binary);
-      
-      return {
-        inlineData: { data: base64EncodedData, mimeType: file.type },
-      };
-    } catch (error: any) {
-      throw new Error(`Failed to process image file: ${error?.message || 'Unknown error'}`);
-    }
+    const base64EncodedDataPromise = new Promise<string>((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve((reader.result as string).split(',')[1]);
+      reader.readAsDataURL(file);
+    });
+    return {
+      inlineData: { data: await base64EncodedDataPromise, mimeType: file.type },
+    };
   }
 
+  /**
+   * Analyzes text for inappropriate content using a separate Gemini call.
+   * Throws an error if the content is flagged as inappropriate.
+   */
   private async checkForInappropriateContent(text: string): Promise<void> {
     if (!text || text.trim() === '') {
-      return;
+      return; // No need to check empty strings
     }
 
-    const ai = await this.ensureAiInitialized();
-    const model = 'gemini-3-flash-preview';
+    const model = 'gemini-2.5-flash';
     const safetyPrompt = `You are a content safety moderator. Analyze the following text to determine if it contains any explicit, harassing, hateful, threatening, or otherwise inappropriate content that violates community guidelines. Respond with only a JSON object. The object must have a key "inappropriate" (boolean) and, if true, a "reason" (string).
 
 Text to analyze: "${text}"`;
 
     try {
-      const response = await ai.models.generateContent({
+      const response = await this.ai.models.generateContent({
         model,
         contents: { parts: [{ text: safetyPrompt }] },
         config: {
@@ -87,50 +77,46 @@ Text to analyze: "${text}"`;
         throw new Error('This content was flagged as inappropriate and cannot be processed. Please adhere to community guidelines.');
       }
     } catch (error: any) {
+      // If the error is the one we threw, re-throw it.
       if (error.message.includes('inappropriate')) {
           throw error;
       }
       console.error('Error during safety check:', error);
+      // Let it pass if the safety check itself fails, to not block users due to transient API issues.
     }
   }
 
-  async getTextFromImageData(base64Data: string, mimeType: string): Promise<string> {
-    const ai = await this.ensureAiInitialized();
-    const model = 'gemini-3-flash-preview';
-    const imagePart = {
-      inlineData: { data: base64Data, mimeType },
-    };
+
+  async getTextFromImage(image: File): Promise<string> {
+    const model = 'gemini-2.5-flash';
+    const imagePart = await this.fileToGenerativePart(image);
     const prompt = "Extract all text from the provided image, which is a screenshot of a chat. Focus on transcribing the last message sent by the other person. Return only the transcribed text, without any additional comments, labels, or explanations.";
 
     try {
-      const response = await ai.models.generateContent({
+      const response = await this.ai.models.generateContent({
         model,
         contents: { parts: [imagePart, { text: prompt }] },
       });
-      
-      if (!response.text) {
-        throw new Error('No text could be extracted from the image. It might be blocked by safety filters.');
-      }
-      
       const extractedText = response.text.trim();
 
+      // Safety Check
       await this.checkForInappropriateContent(extractedText);
       
       return extractedText;
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error processing image:', error);
-      if (error?.message?.includes('inappropriate') || error?.message?.includes('safety')) {
-        throw error;
+      if (error instanceof Error && error.message.includes('inappropriate')) {
+        throw error; // Re-throw the specific safety error
       }
-      throw new Error(`Could not process the screenshot. Error: ${error?.message || 'Unknown error'}`);
+      throw new Error('Could not process the screenshot. It may be unreadable or contain inappropriate content.');
     }
   }
 
-  async generateReplies(userInput: string, imageData?: { base64Data: string, mimeType: string } | null, history?: any[]): Promise<ApiResponse> {
+  async generateReplies(userInput: string, image?: File | null, history?: any[]): Promise<ApiResponse> {
+    // Safety Check on user's direct text input
     await this.checkForInappropriateContent(userInput);
 
-    const ai = await this.ensureAiInitialized();
-    const model = 'gemini-3-flash-preview';
+    const model = 'gemini-2.5-flash';
 
     const systemPrompt = `You are "Desi Wingman," an expert dating coach for the modern Bangladeshi dating scene. You are witty, culturally aware, and act as a supportive friend. Your goal is to help the user with replies for Tinder, Bumble, etc.
 
@@ -181,10 +167,8 @@ The user has provided the following context. Analyze it and generate the 3 reply
       contents.push({ text: historyText });
     }
 
-    if (imageData) {
-      const imagePart = {
-        inlineData: { data: imageData.base64Data, mimeType: imageData.mimeType },
-      };
+    if (image) {
+      const imagePart = await this.fileToGenerativePart(image);
       contents.push(imagePart);
     }
 
@@ -192,12 +176,12 @@ The user has provided the following context. Analyze it and generate the 3 reply
       contents.push({ text: `Her CURRENT message text: "${userInput}"`});
     }
 
-    if (imageData && !userInput) {
+    if (image && !userInput) {
         contents.push({ text: "Analyze the CURRENT screenshot and provide replies to the last message from her."});
     }
 
     try {
-      const response: GenerateContentResponse = await ai.models.generateContent({
+      const response: GenerateContentResponse = await this.ai.models.generateContent({
         model,
         contents: { parts: contents },
         config: {
