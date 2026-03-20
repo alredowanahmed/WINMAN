@@ -22,7 +22,8 @@ export class GeminiService {
   }
 
   reinitialize() {
-    const apiKey = environment.apiKey || (typeof process !== 'undefined' ? process.env.API_KEY : '');
+    const manualKey = typeof window !== 'undefined' ? localStorage.getItem('MANUAL_API_KEY') : null;
+    const apiKey = manualKey || environment.apiKey || (typeof process !== 'undefined' ? process.env.API_KEY : '');
     if (apiKey) {
       this.ai = new GoogleGenAI({ apiKey });
     }

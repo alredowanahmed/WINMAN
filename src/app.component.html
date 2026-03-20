@@ -26,8 +26,58 @@
           </svg>
           {{ hasApiKey() ? 'API Key Set' : 'Set API Key' }}
         </button>
+        <button (click)="toggleSettings()" class="inline-flex items-center gap-2 glass-surface px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white transition-all hover:scale-105 active:scale-95">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          Settings
+        </button>
       </div>
     </header>
+
+    <!-- Settings Modal -->
+    @if (showSettings()) {
+      <div class="fixed inset-0 z-[100] flex items-center justify-center p-6 animate-in fade-in duration-300">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-xl" (click)="toggleSettings()"></div>
+        <div class="relative w-full max-w-lg glass-surface rounded-[3rem] p-10 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-light tracking-tight text-white">Settings</h2>
+            <button (click)="toggleSettings()" class="p-2 text-gray-400 hover:text-white transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="space-y-8">
+            <div>
+              <label class="block text-[10px] uppercase tracking-[0.3em] text-orange-500 font-black mb-4">Gemini API Key</label>
+              <div class="relative">
+                <input
+                  type="password"
+                  [value]="manualApiKey()"
+                  (input)="manualApiKey.set($any($event.target).value)"
+                  placeholder="Enter your API Key..."
+                  class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-white/20 focus:outline-none focus:border-orange-500/50 transition-all"
+                />
+              </div>
+              <p class="mt-4 text-[11px] text-gray-500 leading-relaxed">
+                Your API key is stored locally in your browser. It is used to power the Wingman's AI.
+                Get one for free at <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-orange-500 hover:underline">Google AI Studio</a>.
+              </p>
+            </div>
+
+            <button
+              (click)="saveManualKey()"
+              class="w-full py-5 rounded-2xl bg-orange-600 text-white text-xs font-black uppercase tracking-[0.3em] shadow-xl hover:bg-orange-500 transition-all active:scale-95"
+            >
+              Save Configuration
+            </button>
+          </div>
+        </div>
+      </div>
+    }
 
     @if (showHistory()) {
       <!-- History Section -->

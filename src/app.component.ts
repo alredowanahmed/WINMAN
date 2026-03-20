@@ -30,15 +30,31 @@ export class AppComponent implements OnInit {
   private stream: MediaStream | null = null;
 
   showHistory = signal(false);
+  showSettings = signal(false);
   historyItems = signal<HistoryItem[]>([]);
   hasApiKey = signal<boolean>(true);
+  manualApiKey = signal<string>('');
 
   async ngOnInit() {
     this.loadHistory();
     this.checkApiKey();
+    this.loadManualKey();
+  }
+
+  loadManualKey() {
+    const key = localStorage.getItem('MANUAL_API_KEY');
+    if (key) {
+      this.manualApiKey.set(key);
+    }
   }
 
   async checkApiKey() {
+    const manualKey = localStorage.getItem('MANUAL_API_KEY');
+    if (manualKey) {
+      this.hasApiKey.set(true);
+      return;
+    }
+
     const win = window as any;
     if (win.aistudio && typeof win.aistudio.hasSelectedApiKey === 'function') {
       const hasKey = await win.aistudio.hasSelectedApiKey();
@@ -46,14 +62,33 @@ export class AppComponent implements OnInit {
     }
   }
 
+  toggleSettings() {
+    this.showSettings.update(v => !v);
+  }
+
+  saveManualKey() {
+    const key = this.manualApiKey().trim();
+    if (key) {
+      localStorage.setItem('MANUAL_API_KEY', key);
+      this.hasApiKey.set(true);
+      this.geminiService.reinitialize();
+      this.showSettings.set(false);
+    } else {
+      localStorage.removeItem('MANUAL_API_KEY');
+      this.checkApiKey();
+      this.geminiService.reinitialize();
+      this.showSettings.set(false);
+    }
+  }
+
   async openKeySelector() {
     const win = window as any;
     if (win.aistudio && typeof win.aistudio.openSelectKey === 'function') {
       await win.aistudio.openSelectKey();
-      // After selection, we assume success and refresh the state
       this.hasApiKey.set(true);
-      // Re-initialize Gemini service if needed (it will pick up the new key from process.env)
       this.geminiService.reinitialize();
+    } else {
+      this.toggleSettings();
     }
   }
 
