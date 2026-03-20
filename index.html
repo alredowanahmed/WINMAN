@@ -3,60 +3,20 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Desi Wingman | AI Dating Coach for USA, Europe & South Asia</title>
+  <title>Desi Wingman</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Desi Wingman is the #1 AI-powered dating coach for the modern Desi scene. Get expert rizz advice, screenshot analysis, and chat replies tailored for USA, UK, Europe, and South Asia (India, Bangladesh, Pakistan)." />
-  <meta name="keywords" content="dating coach USA, AI dating assistant Europe, desi wingman South Asia, rizz advice India, dating help UK, screenshot analysis Bangladesh, dating app assistant Pakistan, modern dating coach London, dating coach New York" />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://ais-pre-5qlk4lczexxhg5kwdhu6ef-597419380028.asia-southeast1.run.app/" />
-  
-  <!-- Regional Targeting -->
-  <link rel="alternate" href="https://ais-pre-5qlk4lczexxhg5kwdhu6ef-597419380028.asia-southeast1.run.app/" hreflang="en-US" />
-  <link rel="alternate" href="https://ais-pre-5qlk4lczexxhg5kwdhu6ef-597419380028.asia-southeast1.run.app/" hreflang="en-GB" />
-  <link rel="alternate" href="https://ais-pre-5qlk4lczexxhg5kwdhu6ef-597419380028.asia-southeast1.run.app/" hreflang="en-IN" />
-  <link rel="alternate" href="https://ais-pre-5qlk4lczexxhg5kwdhu6ef-597419380028.asia-southeast1.run.app/" hreflang="en-BD" />
-  <link rel="alternate" href="https://ais-pre-5qlk4lczexxhg5kwdhu6ef-597419380028.asia-southeast1.run.app/" hreflang="en-PK" />
-  <link rel="alternate" href="https://ais-pre-5qlk4lczexxhg5kwdhu6ef-597419380028.asia-southeast1.run.app/" hreflang="x-default" />
-
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://ais-pre-5qlk4lczexxhg5kwdhu6ef-597419380028.asia-southeast1.run.app/" />
-  <meta property="og:site_name" content="Desi Wingman" />
-  <meta property="og:title" content="Desi Wingman | AI Dating Coach for the Global Desi Scene" />
-  <meta property="og:description" content="Your AI dating coach for USA, Europe, and South Asia. Get expert advice and rizz-filled replies for your chats." />
-  <meta property="og:image" content="https://picsum.photos/seed/wingman/1200/630" />
-  <meta property="og:locale" content="en_US" />
-
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://ais-pre-5qlk4lczexxhg5kwdhu6ef-597419380028.asia-southeast1.run.app/" />
-  <meta property="twitter:title" content="Desi Wingman | AI Dating Coach" />
-  <meta property="twitter:description" content="Your AI dating coach for the global scene. Get expert advice and rizz-filled replies for your chats." />
-  <meta property="twitter:image" content="https://picsum.photos/seed/wingman/1200/630" />
-
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --orange-primary: #ff4e00;
-      --orange-secondary: #ea580c;
-      --font-display: 'Outfit', sans-serif;
-      --font-body: 'Inter', sans-serif;
-    }
     body { 
-      font-family: var(--font-body); 
-      background-color: #020203;
+      font-family: 'Poppins', sans-serif; 
+      background-color: #050201;
       color: #fff;
       overflow-x: hidden;
       margin: 0;
-      scroll-behavior: smooth;
-    }
-    h1, h2, h3, .font-display {
-      font-family: var(--font-display);
     }
     .atmosphere {
       position: fixed;
@@ -65,81 +25,31 @@
       width: 100%;
       height: 100%;
       background: 
-        radial-gradient(circle at 50% -10%, rgba(255, 78, 0, 0.15) 0%, transparent 60%),
-        radial-gradient(circle at 0% 100%, rgba(255, 78, 0, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 100% 100%, rgba(99, 33, 0, 0.1) 0%, transparent 50%);
-      filter: blur(100px);
-      opacity: 0.8;
+        radial-gradient(circle at 50% 20%, #4a1d17 0%, transparent 60%),
+        radial-gradient(circle at 10% 80%, #ff4e00 0%, transparent 50%),
+        radial-gradient(circle at 90% 90%, #632100 0%, transparent 40%);
+      filter: blur(80px);
+      opacity: 0.5;
       z-index: -1;
       pointer-events: none;
+      animation: pulse 15s ease-in-out infinite alternate;
     }
-    .noise-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-      opacity: 0.03;
-      z-index: 9999;
-      pointer-events: none;
+    @keyframes pulse {
+      0% { opacity: 0.4; transform: scale(1); }
+      100% { opacity: 0.6; transform: scale(1.1); }
     }
     .glass-surface {
       background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(32px);
-      -webkit-backdrop-filter: blur(32px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      box-shadow: 0 20px 80px 0 rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     }
     .text-glow {
-      text-shadow: 0 0 50px rgba(255, 78, 0, 0.4);
-    }
-    .btn-glow:hover {
-      box-shadow: 0 0 40px rgba(255, 78, 0, 0.4);
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-15px); }
-    }
-    .animate-float {
-      animation: float 8s ease-in-out infinite;
-    }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: rgba(0, 0, 0, 0.2);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(255, 78, 0, 0.2);
-      border-radius: 10px;
-      border: 2px solid transparent;
-      background-clip: content-box;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 78, 0, 0.4);
-      background-clip: content-box;
-    }
-
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 4px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.1);
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-    .selection-orange::selection {
-      background: rgba(255, 78, 0, 0.4);
-      color: #fff;
+      text-shadow: 0 0 20px rgba(255, 78, 0, 0.4);
     }
   </style>
 </head>
-<body class="bg-black text-white selection-orange">
-  <div class="noise-overlay"></div>
+<body class="bg-black text-white">
   <div class="atmosphere"></div>
   <app-root></app-root>
 </body>

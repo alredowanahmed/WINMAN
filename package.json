@@ -6,22 +6,18 @@
   "scripts": {
     "dev": "node set-env.js && ng serve",
     "build": "node set-env.js && ng build",
-    "lint": "ng lint",
     "preview": "node set-env.js && ng serve --configuration=production"
   },
   "dependencies": {
     "@angular/build": "^21.2.0",
-    "@angular/cdk": "^21.2.3",
     "@angular/cli": "^21.2.0",
     "@angular/common": "^21.2.0",
     "@angular/compiler": "^21.2.0",
     "@angular/compiler-cli": "^21.2.0",
     "@angular/core": "^21.2.0",
     "@angular/forms": "^21.2.0",
-    "@angular/material": "^21.2.3",
     "@angular/platform-browser": "^21.2.0",
     "@google/genai": "^1.34.0",
-    "firebase": "^12.11.0",
     "motion": "^12.38.0",
     "rxjs": "^7.8.2",
     "tailwindcss": "latest"

@@ -1,125 +1,79 @@
 
 <main class="min-h-screen p-4 sm:p-6 md:p-8 flex flex-col items-center relative overflow-hidden">
   
-  @if (isAdminView()) {
-    <app-admin class="w-full"></app-admin>
-    <button (click)="toggleAdminView()" class="fixed bottom-8 right-8 z-[100] px-6 py-3 rounded-full bg-orange-600 text-white text-xs font-black uppercase tracking-widest shadow-2xl hover:bg-orange-500 transition-all active:scale-95">
-      Exit Admin
-    </button>
-  } @else {
-    <div class="w-full max-w-5xl mx-auto z-10">
+  <div class="w-full max-w-2xl mx-auto z-10">
     
     <!-- Header -->
-    <header class="text-center mb-16 relative pt-12">
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/5 border border-orange-500/10 mb-8 animate-in fade-in slide-in-from-top-4 duration-1000">
-        <span class="flex h-1.5 w-1.5 rounded-full bg-orange-500 animate-pulse"></span>
-        <span class="text-[9px] font-bold uppercase tracking-[0.3em] text-orange-500/80">Premium AI Dating Coach</span>
-      </div>
-      
-      <h1 class="text-7xl sm:text-8xl font-black tracking-tighter text-white mb-6 text-glow animate-in fade-in slide-in-from-top-8 duration-1000 font-display">
-        Desi <span class="text-transparent bg-clip-text bg-gradient-to-b from-orange-400 to-orange-600 italic">Wingman</span>
+    <header class="text-center mb-16 relative">
+      <h1 class="text-7xl sm:text-8xl font-bold tracking-tighter text-white mb-4 text-glow animate-in fade-in slide-in-from-top-8 duration-1000">
+        Desi <span class="text-orange-500 italic">Wingman</span>
       </h1>
-      <p class="text-gray-500 text-xl font-light tracking-tight animate-in fade-in slide-in-from-top-4 duration-1000 delay-200 max-w-xl mx-auto leading-relaxed">
-        Elevate your <span class="text-white font-medium">dating game</span> with AI-powered insights. From first texts to deep connections, we've got your back.
+      <p class="text-gray-400 text-xl font-light tracking-wide animate-in fade-in slide-in-from-top-4 duration-1000 delay-200">
+        Your AI dating coach for the modern BD scene.
       </p>
       
-      <div class="flex flex-wrap justify-center gap-4 mt-12 animate-in fade-in slide-in-from-top-2 duration-1000 delay-500">
-        <button (click)="toggleHistory()" class="group inline-flex items-center gap-2.5 glass-surface px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-white transition-all hover:scale-105 active:scale-95 border border-white/5">
-          <mat-icon class="text-base">history</mat-icon>
+      <div class="flex justify-center gap-4 mt-8 animate-in fade-in slide-in-from-top-2 duration-1000 delay-500">
+        <button (click)="toggleHistory()" class="inline-flex items-center gap-2 glass-surface px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white transition-all hover:scale-105 active:scale-95">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
           {{ showHistory() ? 'Back to App' : 'History' }}
         </button>
         
-        <button (click)="openKeySelector()" class="group inline-flex items-center gap-2.5 glass-surface px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all hover:scale-105 active:scale-95 border border-white/5" [class.text-orange-500]="!hasApiKey()" [class.text-gray-400]="hasApiKey()" [class.hover:text-white]="hasApiKey()">
-          <mat-icon class="text-base">vpn_key</mat-icon>
+        <button (click)="openKeySelector()" class="inline-flex items-center gap-2 glass-surface px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all hover:scale-105 active:scale-95" [class.text-orange-500]="!hasApiKey()" [class.text-gray-300]="hasApiKey()" [class.hover:text-white]="hasApiKey()">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+          </svg>
           {{ hasApiKey() ? 'API Key Set' : 'Set API Key' }}
         </button>
-
-        <button (click)="toggleSettings()" class="group inline-flex items-center gap-2.5 glass-surface px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-white transition-all hover:scale-105 active:scale-95 border border-white/5">
-          <mat-icon class="text-base">settings</mat-icon>
+        <button (click)="toggleSettings()" class="inline-flex items-center gap-2 glass-surface px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white transition-all hover:scale-105 active:scale-95">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
           Settings
         </button>
-
-        @if (user()) {
-          @if (user()?.email === 'fahimdj071@gmail.com') {
-            <button (click)="toggleAdminView()" class="group inline-flex items-center gap-2.5 glass-surface px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest text-orange-500 hover:text-orange-400 transition-all hover:scale-105 active:scale-95 border border-orange-500/20">
-              <mat-icon class="text-base">admin_panel_settings</mat-icon>
-              Admin
-            </button>
-          }
-          <button (click)="logout()" class="group inline-flex items-center gap-2.5 glass-surface px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-white transition-all hover:scale-105 active:scale-95 border border-white/5">
-            <mat-icon class="text-base">logout</mat-icon>
-            Logout
-          </button>
-        } @else {
-          <button (click)="login()" class="group inline-flex items-center gap-2.5 glass-surface px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest text-orange-500 hover:text-orange-400 transition-all hover:scale-105 active:scale-95 border border-orange-500/20">
-            <mat-icon class="text-base">login</mat-icon>
-            Login
-          </button>
-        }
       </div>
     </header>
 
     <!-- Settings Modal -->
     @if (showSettings()) {
-      <div class="fixed inset-0 z-[100] flex items-center justify-center p-6 animate-in fade-in duration-500">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-2xl" (click)="toggleSettings()"></div>
-        <div class="relative w-full max-w-xl glass-surface rounded-[4rem] p-12 shadow-2xl animate-in zoom-in-95 duration-500 border border-white/10">
-          <div class="flex justify-between items-center mb-12">
-            <div>
-              <h2 class="text-3xl font-black tracking-tight text-white">SETTINGS</h2>
-              <p class="text-gray-500 text-[9px] uppercase tracking-[0.3em] font-bold">Configure your experience</p>
-            </div>
-            <button (click)="toggleSettings()" class="p-4 rounded-2xl bg-white/5 text-gray-400 hover:text-white transition-all hover:rotate-90">
-              <mat-icon>close</mat-icon>
+      <div class="fixed inset-0 z-[100] flex items-center justify-center p-6 animate-in fade-in duration-300">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-xl" (click)="toggleSettings()"></div>
+        <div class="relative w-full max-w-lg glass-surface rounded-[3rem] p-10 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-light tracking-tight text-white">Settings</h2>
+            <button (click)="toggleSettings()" class="p-2 text-gray-400 hover:text-white transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
           </div>
 
-          <div class="space-y-12">
+          <div class="space-y-8">
             <div>
-              <label class="block text-[10px] uppercase tracking-[0.4em] text-orange-500 font-black mb-6">Gemini API Key</label>
-              <div class="relative group">
+              <label class="block text-[10px] uppercase tracking-[0.3em] text-orange-500 font-black mb-4">Gemini API Key</label>
+              <div class="relative">
                 <input
                   type="password"
                   [value]="manualApiKey()"
                   (input)="manualApiKey.set($any($event.target).value)"
                   placeholder="Enter your API Key..."
-                  class="w-full bg-white/[0.02] border border-white/5 rounded-[2rem] px-8 py-6 text-white placeholder:text-gray-800 focus:outline-none focus:border-orange-500/30 focus:ring-8 focus:ring-orange-500/5 transition-all text-lg font-light"
+                  class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-white/20 focus:outline-none focus:border-orange-500/50 transition-all"
                 />
-                <div class="absolute inset-y-0 right-6 flex items-center">
-                  <mat-icon class="text-gray-800 group-focus-within:text-orange-500/50 transition-colors">vpn_key</mat-icon>
-                </div>
               </div>
-              <p class="mt-6 text-[11px] text-gray-500 leading-relaxed font-light">
+              <p class="mt-4 text-[11px] text-gray-500 leading-relaxed">
                 Your API key is stored locally in your browser. It is used to power the Wingman's AI.
-                Get one for free at <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-orange-500 hover:underline font-medium">Google AI Studio</a>.
+                Get one for free at <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-orange-500 hover:underline">Google AI Studio</a>.
               </p>
             </div>
 
             <button
               (click)="saveManualKey()"
-              class="w-full py-6 rounded-[2rem] bg-gradient-to-b from-orange-500 to-orange-700 text-white text-[11px] font-black uppercase tracking-[0.4em] shadow-2xl hover:scale-[1.02] transition-all active:scale-[0.98] btn-glow"
+              class="w-full py-5 rounded-2xl bg-orange-600 text-white text-xs font-black uppercase tracking-[0.3em] shadow-xl hover:bg-orange-500 transition-all active:scale-95"
             >
               Save Configuration
             </button>
-
-            <div class="pt-10 border-t border-white/5">
-              <h3 class="text-[9px] uppercase tracking-[0.4em] text-emerald-500 font-black mb-8">Support the Developer</h3>
-              <div class="grid grid-cols-2 gap-6">
-                <a href="#" class="glass-surface rounded-[2rem] p-6 flex items-center gap-4 hover:bg-white/[0.05] transition-all group border border-white/5">
-                  <div class="w-12 h-12 rounded-2xl bg-yellow-500/5 flex items-center justify-center text-yellow-500 group-hover:scale-110 transition-transform border border-yellow-500/10">
-                    <mat-icon>bolt</mat-icon>
-                  </div>
-                  <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400 group-hover:text-white transition-colors">bKash</span>
-                </a>
-                <a href="#" class="glass-surface rounded-[2rem] p-6 flex items-center gap-4 hover:bg-white/[0.05] transition-all group border border-white/5">
-                  <div class="w-12 h-12 rounded-2xl bg-blue-500/5 flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform border border-blue-500/10">
-                    <mat-icon>coffee</mat-icon>
-                  </div>
-                  <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400 group-hover:text-white transition-colors">Coffee</span>
-                </a>
-              </div>
-              <p class="mt-6 text-[10px] text-gray-700 text-center italic font-light">Your support helps keep the Wingman online!</p>
-            </div>
           </div>
         </div>
       </div>
@@ -127,73 +81,58 @@
 
     @if (showHistory()) {
       <!-- History Section -->
-      <div class="glass-surface rounded-[4rem] p-12 shadow-2xl border border-white/5 animate-in fade-in zoom-in-95 duration-1000">
-        <div class="flex justify-between items-center mb-12">
-          <div class="flex items-center gap-6">
-            <div class="w-16 h-16 rounded-2xl bg-orange-500/5 flex items-center justify-center border border-orange-500/10">
-              <mat-icon class="text-orange-500 text-3xl">history</mat-icon>
-            </div>
-            <div>
-              <h2 class="text-3xl font-black tracking-tight text-white">THE VAULT</h2>
-              <p class="text-gray-500 text-[9px] uppercase tracking-[0.3em] font-bold">Your past dating plays</p>
-            </div>
-          </div>
+      <div class="glass-surface rounded-3xl p-8 shadow-2xl">
+        <div class="flex justify-between items-center mb-8">
+          <h2 class="text-3xl font-light text-white">History</h2>
           @if (historyItems().length > 0) {
-            <button (click)="clearHistory()" class="px-8 py-3 rounded-2xl bg-red-500/5 text-red-500 text-[10px] font-bold uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all border border-red-500/10">
+            <button (click)="clearHistory()" class="text-sm text-red-400/70 hover:text-red-400 transition-colors uppercase tracking-widest font-semibold">
               Clear All
             </button>
           }
         </div>
         
         @if (historyItems().length === 0) {
-          <div class="text-center py-32 glass-surface rounded-[3rem] border border-dashed border-white/5">
-            <mat-icon class="text-gray-800 text-7xl mb-6">history_toggle_off</mat-icon>
-            <p class="text-gray-500 text-xl font-light">Your vault is empty. Time to make some moves.</p>
+          <div class="text-center py-20 text-gray-500">
+            <p class="text-xl font-light">No history yet. Start asking for advice!</p>
           </div>
         } @else {
-          <div class="grid grid-cols-1 gap-8 max-h-[700px] overflow-y-auto pr-6 custom-scrollbar">
-            @for (item of historyItems(); track item.timestamp) {
-              <div class="glass-surface rounded-[3rem] p-10 border border-white/5 hover:bg-white/[0.02] transition-all group relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-1 h-full bg-orange-500/20 group-hover:bg-orange-500 transition-colors"></div>
+          <div class="space-y-8">
+            @for (item of historyItems(); track item.id) {
+              <div class="border-b border-white/5 pb-8 last:border-0">
+                <div class="text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-4">{{ item.timestamp | date:'medium' }}</div>
                 
-                <div class="flex justify-between items-start mb-8">
-                  <span class="text-[9px] font-bold uppercase tracking-[0.3em] text-gray-700">{{ item.timestamp | date:'medium' }}</span>
-                  <div class="flex gap-1.5">
-                    <div class="w-1.5 h-1.5 rounded-full bg-orange-500/20"></div>
-                    <div class="w-1.5 h-1.5 rounded-full bg-orange-500/20"></div>
-                  </div>
-                </div>
-                
-                <div class="flex gap-10 items-start mb-10">
+                <div class="mb-6 flex gap-6 items-start">
                   @if (item.imagePreviewUrl) {
-                    <div class="relative flex-shrink-0 group/img">
-                      <img [src]="item.imagePreviewUrl" class="w-28 h-28 object-cover rounded-3xl border border-white/10 shadow-2xl transition-transform group-hover/img:scale-105" alt="Uploaded screenshot">
-                      <div class="absolute inset-0 bg-orange-500/5 rounded-3xl"></div>
-                    </div>
+                    <img [src]="item.imagePreviewUrl" class="w-24 h-24 object-cover rounded-2xl border border-white/10" alt="Uploaded screenshot">
                   }
                   @if (item.userInput) {
                     <div class="flex-1">
-                      <span class="text-[9px] font-bold uppercase tracking-[0.3em] text-orange-500/40 block mb-3">The Context</span>
-                      <p class="text-xl font-light text-gray-400 italic leading-relaxed">"{{ item.userInput }}"</p>
+                      <span class="text-[10px] uppercase tracking-widest text-orange-500/70 block mb-1">Her message</span>
+                      <p class="text-lg font-light text-gray-200 italic">"{{ item.userInput }}"</p>
                     </div>
                   }
                 </div>
                 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  @for (option of item.responses.options; track $index) {
-                    <div class="p-6 rounded-[2rem] bg-white/[0.01] border border-white/5 group/reply relative hover:bg-white/[0.03] transition-all">
-                      <span class="text-[8px] font-bold uppercase tracking-widest text-orange-500/40 block mb-2">{{ option.title }}</span>
-                      <p class="text-base text-gray-500 leading-relaxed pr-20 line-clamp-2 font-light italic">"{{ option.reply }}"</p>
-                      <div class="absolute top-6 right-6 flex gap-3 opacity-0 group-hover/reply:opacity-100 transition-opacity">
-                        <button (click)="copyToClipboard(option.reply, item.timestamp + $index)"
-                                class="p-2 rounded-lg bg-white/5 text-gray-500 hover:text-white transition-colors"
-                                [title]="copiedState()[item.timestamp + $index] ? 'Copied!' : 'Copy'">
-                          <mat-icon class="text-base">{{ copiedState()[item.timestamp + $index] ? 'done' : 'content_copy' }}</mat-icon>
-                        </button>
-                        <button (click)="shareAdvice(option.reply)"
-                                class="p-2 rounded-lg bg-white/5 text-gray-500 hover:text-white transition-colors"
-                                title="Share">
-                          <mat-icon class="text-base">share</mat-icon>
+                <div class="grid grid-cols-1 gap-4">
+                  @for (option of item.responses.options; track option.title; let i = $index) {
+                    <div class="glass-surface rounded-2xl p-4 group relative">
+                      <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                          <span class="text-[10px] uppercase tracking-widest text-teal-500 font-bold">{{ option.title }}</span>
+                          <p class="mt-1 text-sm text-gray-300 leading-relaxed">{{ option.reply }}</p>
+                        </div>
+                        <button (click)="copyToClipboard(option.reply, item.id! * 100 + i)"
+                                class="ml-4 p-2 rounded-full hover:bg-white/10 transition-all"
+                                [title]="copiedState()[item.id! * 100 + i] ? 'Copied!' : 'Copy'">
+                          @if (copiedState()[item.id! * 100 + i]) {
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                          } @else {
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                          }
                         </button>
                       </div>
                     </div>
@@ -204,224 +143,160 @@
           </div>
         }
       </div>
-    }
- @else {
-      <!-- Focused Layout -->
-      <div class="flex flex-col gap-12">
-        
-        <!-- Main Input Section -->
-        <section class="glass-surface rounded-[4rem] p-12 shadow-2xl animate-in fade-in zoom-in-95 duration-1000 border border-white/5 relative overflow-hidden group">
-          <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-orange-500/20 to-transparent"></div>
-          
-          <div class="flex items-center justify-between mb-12">
-            <div class="flex items-center gap-5">
-              <div class="w-14 h-14 rounded-2xl bg-orange-500/5 flex items-center justify-center border border-orange-500/10">
-                <mat-icon class="text-orange-500 text-2xl">chat_bubble_outline</mat-icon>
-              </div>
-              <div>
-                <h2 class="text-2xl font-black tracking-tight text-white">THE CONVERSATION</h2>
-                <p class="text-gray-500 text-[9px] uppercase tracking-[0.3em] font-bold">Input her message below</p>
-              </div>
+    } @else {
+      <!-- Input Section -->
+      <div class="glass-surface rounded-[2.5rem] p-10 shadow-2xl animate-in fade-in zoom-in-95 duration-700">
+        <div class="space-y-10">
+          <div>
+            <label for="message" class="text-[10px] uppercase tracking-[0.4em] text-gray-500 font-black block mb-6">
+              The Message
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              rows="3"
+              [ngModel]="userInput()" 
+              (ngModelChange)="userInput.set($event)"
+              class="w-full bg-transparent border-b border-white/10 focus:border-orange-500 outline-none py-6 text-2xl font-light text-white transition-all placeholder-gray-800 disabled:opacity-50"
+              [placeholder]="isExtractingText() ? 'Reading...' : 'What did she say?'"
+              [disabled]="isExtractingText()"
+            ></textarea>
+          </div>
+
+          <div class="flex items-center gap-6">
+            <div class="h-px flex-1 bg-white/5"></div>
+            <span class="text-[10px] uppercase tracking-widest text-gray-700 font-black">or</span>
+            <div class="h-px flex-1 bg-white/5"></div>
+          </div>
+
+          <div>
+            <div class="flex justify-between items-center mb-8">
+              <span class="text-[10px] uppercase tracking-[0.4em] text-gray-500 font-black">Visual Context</span>
+              <button type="button" (click)="openCamera()" class="text-[10px] uppercase tracking-widest font-black text-orange-500 hover:text-orange-400 transition-colors disabled:opacity-50 flex items-center gap-2" [disabled]="isLoading() || isExtractingText()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Camera
+              </button>
             </div>
             
-            <div class="flex gap-4">
-              <button (click)="openCamera()" class="p-5 rounded-2xl bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all group/btn" title="Take Photo">
-                <mat-icon class="text-2xl">photo_camera</mat-icon>
-              </button>
-              <label for="file-upload" class="p-5 rounded-2xl bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer group/btn" title="Upload Screenshot">
-                <mat-icon class="text-2xl">image</mat-icon>
-                <input id="file-upload" type="file" class="hidden" (change)="onFileChange($event)" accept="image/*">
+            <div class="relative group">
+              <label for="file-upload" class="flex flex-col items-center justify-center w-full h-56 rounded-[2rem] border-2 border-dashed border-white/5 hover:border-orange-500/30 transition-all cursor-pointer bg-white/[0.02] hover:bg-white/[0.05]">
+                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                  <svg class="w-12 h-12 mb-4 text-gray-600 group-hover:text-orange-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 00-2 2z"></path>
+                  </svg>
+                  <p class="text-sm text-gray-500 font-light">Drop screenshot or <span class="text-orange-500 font-medium">browse</span></p>
+                </div>
+                <input id="file-upload" name="file-upload" type="file" class="sr-only" (change)="onFileChange($event)" accept="image/*">
               </label>
             </div>
           </div>
 
-          <!-- Image Preview -->
           @if (uploadedImage().previewUrl) {
-            <div class="mb-12 relative group/img animate-in fade-in zoom-in-95 duration-700">
-              <img [src]="uploadedImage().previewUrl" class="w-full h-80 object-cover rounded-[3rem] border border-white/10 shadow-2xl" referrerpolicy="no-referrer">
-              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity rounded-[3rem] flex items-center justify-center">
-                <button (click)="clearInput()" class="p-5 rounded-full bg-red-500 text-white shadow-2xl hover:scale-110 transition-transform">
-                  <mat-icon>close</mat-icon>
-                </button>
-              </div>
-              @if (isExtractingText()) {
-                <div class="absolute inset-0 bg-black/60 backdrop-blur-xl rounded-[3rem] flex flex-col items-center justify-center gap-6">
-                  <div class="flex gap-3">
-                    <div class="w-2.5 h-2.5 bg-orange-500 rounded-full animate-bounce"></div>
-                    <div class="w-2.5 h-2.5 bg-orange-500 rounded-full animate-bounce [animation-delay:0.2s]"></div>
-                    <div class="w-2.5 h-2.5 bg-orange-500 rounded-full animate-bounce [animation-delay:0.4s]"></div>
+            <div class="mt-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div class="relative rounded-2xl overflow-hidden border border-white/10">
+                <img [src]="uploadedImage().previewUrl" alt="Screenshot preview" class="w-full max-w-md mx-auto" [class.blur-sm]="isExtractingText()">
+                @if (isExtractingText()) {
+                  <div class="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                    <div class="flex items-center gap-3 text-white">
+                      <div class="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                      <span class="text-sm font-medium tracking-widest uppercase">Analyzing</span>
+                    </div>
                   </div>
-                  <span class="text-[10px] font-bold uppercase tracking-[0.4em] text-white">Reading Screenshot...</span>
-                </div>
-              }
+                }
+              </div>
             </div>
           }
 
-          <div class="relative mb-12">
-            <textarea 
-              [(ngModel)]="userInput"
-              placeholder="Paste her message here or describe the situation..."
-              class="w-full bg-white/[0.02] border border-white/5 rounded-[3rem] p-10 text-white placeholder-gray-800 focus:outline-none focus:border-orange-500/30 focus:ring-8 focus:ring-orange-500/5 transition-all min-h-[280px] text-2xl font-light leading-relaxed resize-none"
-            ></textarea>
-            
-            <div class="absolute bottom-8 right-10 flex items-center gap-6">
-              @if (userInput()) {
-                <button (click)="clearInput()" class="text-gray-700 hover:text-gray-500 text-[9px] font-bold uppercase tracking-widest transition-colors">
-                  Clear
-                </button>
-              }
-            </div>
-          </div>
-
-          <button 
-            (click)="getHelp()"
-            [disabled]="isLoading() || (!userInput() && !uploadedImage().file)"
-            class="w-full py-8 rounded-[2rem] bg-gradient-to-b from-orange-500 to-orange-700 text-white text-[12px] font-black uppercase tracking-[0.5em] shadow-[0_20px_60px_rgba(234,88,12,0.2)] hover:shadow-[0_30px_80px_rgba(234,88,12,0.4)] hover:scale-[1.01] transition-all active:scale-[0.98] disabled:opacity-50 disabled:grayscale relative overflow-hidden group/btn btn-glow"
-          >
-            <div class="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-1000 skew-x-12"></div>
-            
-            <div class="flex items-center justify-center gap-4 relative z-10">
+          <div class="flex items-center justify-between pt-8">
+            <button
+              type="button"
+              (click)="clearInput()"
+              class="text-[10px] uppercase tracking-widest font-bold text-gray-500 hover:text-white transition-colors disabled:opacity-50"
+              [disabled]="isLoading() || isExtractingText()"
+            >
+              Reset
+            </button>
+            <button
+              type="button"
+              (click)="getHelp()"
+              class="px-12 py-5 rounded-full bg-gradient-to-r from-orange-600 to-red-600 text-white text-xs font-black uppercase tracking-[0.3em] shadow-[0_0_40px_rgba(234,88,12,0.4)] hover:shadow-[0_0_60px_rgba(234,88,12,0.6)] hover:scale-105 transition-all active:scale-95 disabled:opacity-50 disabled:grayscale relative overflow-hidden group/btn"
+              [disabled]="isLoading() || isExtractingText()"
+            >
+              <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-1000"></div>
               @if (isLoading()) {
-                <div class="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                <span>Analyzing...</span>
+                <div class="flex items-center gap-4">
+                  <div class="flex gap-1">
+                    <div class="w-1.5 h-1.5 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                    <div class="w-1.5 h-1.5 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                    <div class="w-1.5 h-1.5 bg-white rounded-full animate-bounce"></div>
+                  </div>
+                  <span>Thinking</span>
+                </div>
               } @else {
-                <mat-icon class="text-2xl">bolt</mat-icon>
-                <span>Get Expert Advice</span>
+                <span class="relative z-10">Get Advice</span>
               }
-            </div>
-          </button>
-        </section>
-
-        <!-- Trust & Info Section -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div class="glass-surface p-10 rounded-[3rem] border border-white/5 flex items-center gap-8 group hover:bg-white/[0.02] transition-all">
-            <div class="w-16 h-16 rounded-3xl bg-emerald-500/5 flex items-center justify-center border border-emerald-500/10 group-hover:scale-110 transition-transform">
-              <mat-icon class="text-emerald-500 text-3xl">security</mat-icon>
-            </div>
-            <div>
-              <h3 class="text-white font-black text-base tracking-tight mb-1">100% PRIVATE</h3>
-              <p class="text-gray-500 text-sm leading-relaxed">Your conversations are never stored on our servers.</p>
-            </div>
-          </div>
-
-          <div class="glass-surface p-10 rounded-[3rem] border border-white/5 flex items-center gap-8 group hover:bg-white/[0.02] transition-all">
-            <div class="w-16 h-16 rounded-3xl bg-blue-500/5 flex items-center justify-center border border-blue-500/10 group-hover:scale-110 transition-transform">
-              <mat-icon class="text-blue-500 text-3xl">auto_awesome</mat-icon>
-            </div>
-            <div>
-              <h3 class="text-white font-black text-base tracking-tight mb-1">AI POWERED</h3>
-              <p class="text-gray-500 text-sm leading-relaxed">Advanced Gemini models trained on modern dating dynamics.</p>
-            </div>
+            </button>
           </div>
         </div>
+      </div>
 
-          <!-- Ad Placement -->
-          @for (ad of ads(); track ad.id) {
-            @if (ad.adScript) {
-              <div class="glass-surface rounded-[2.5rem] p-8 border border-orange-500/20 relative overflow-hidden group hover:bg-white/5 transition-all">
-                <div class="absolute top-4 right-6 text-[8px] font-black uppercase tracking-widest text-orange-500/50">Sponsored</div>
-                <app-ad-script [script]="ad.adScript"></app-ad-script>
-              </div>
-            } @else {
-              <a [href]="ad.link" target="_blank" class="block glass-surface rounded-[2.5rem] p-8 border border-orange-500/20 relative overflow-hidden group hover:bg-white/5 transition-all">
-                <div class="absolute top-4 right-6 text-[8px] font-black uppercase tracking-widest text-orange-500/50">Sponsored</div>
-                <h3 class="text-orange-500 font-black text-sm tracking-widest uppercase mb-2">{{ ad.title }}</h3>
-                <p class="text-gray-400 text-xs leading-relaxed mb-6">{{ ad.description }}</p>
-                <div class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white group-hover:gap-4 transition-all">
-                  Check it out <mat-icon class="text-sm">arrow_forward</mat-icon>
-                </div>
-              </a>
-            }
-          }
+      <!-- Error Display -->
+      @if (error()) {
+        <div class="mt-8 glass-surface border-red-500/20 text-red-400 px-6 py-4 rounded-2xl animate-in fade-in slide-in-from-top-4 duration-300">
+          <div class="flex items-center gap-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-sm font-light">{{ error() }}</span>
+          </div>
         </div>
+      }
 
-      <!-- Results Section (Full Width) -->
+      <!-- Response Section -->
       @if (responses() && !isLoading()) {
-        <section id="results" class="mt-24 space-y-16 animate-in fade-in slide-in-from-bottom-12 duration-1000">
-          <div class="text-center space-y-6">
-            <div class="inline-flex items-center gap-3 px-4 py-1 rounded-full bg-orange-500/5 border border-orange-500/10 mb-2">
-              <span class="text-[9px] font-bold uppercase tracking-[0.4em] text-orange-500/80">Mission Accomplished</span>
-            </div>
-            <h2 class="text-5xl sm:text-6xl font-black tracking-tighter text-white font-display">THE STRATEGIC PLAN</h2>
-            <div class="h-1.5 w-32 bg-gradient-to-r from-transparent via-orange-500 to-transparent mx-auto rounded-full"></div>
+        <div class="mt-16 w-full animate-in fade-in slide-in-from-bottom-12 duration-1000">
+          <div class="flex items-center gap-4 mb-12">
+            <div class="h-px flex-1 bg-white/10"></div>
+            <h2 class="text-[10px] uppercase tracking-[0.5em] text-center text-orange-500 font-black">The Game Plan</h2>
+            <div class="h-px flex-1 bg-white/10"></div>
           </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-            @for (option of responses()?.options; track $index) {
-              <article class="glass-surface rounded-[4rem] p-12 border border-white/5 relative group hover:border-orange-500/20 transition-all hover:shadow-[0_40px_80px_rgba(0,0,0,0.4)] flex flex-col h-full overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-orange-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                
-                <div class="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-gradient-to-br from-orange-500 to-orange-700 flex items-center justify-center text-white font-black shadow-2xl text-2xl z-10">
-                  {{ $index + 1 }}
-                </div>
-                
-                <div class="mb-10 relative z-10">
-                  <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-orange-500/60 mb-4 block">{{ option.title }}</span>
-                  <p class="text-white text-2xl font-light leading-relaxed italic tracking-tight">"{{ option.reply }}"</p>
-                </div>
-
-                <div class="mt-auto pt-10 border-t border-white/5 flex items-center justify-between relative z-10">
-                  <div class="flex items-center gap-4">
-                    <button 
-                      (click)="copyToClipboard(option.reply, $index)"
-                      class="flex items-center gap-3 px-6 py-3 rounded-2xl bg-white/5 hover:bg-orange-500 text-white transition-all group/copy"
-                      [title]="copiedState()[$index] ? 'Copied!' : 'Copy to Clipboard'"
-                    >
-                      <mat-icon class="text-xl">{{ copiedState()[$index] ? 'done' : 'content_copy' }}</mat-icon>
-                      <span class="text-[10px] font-bold uppercase tracking-widest">{{ copiedState()[$index] ? 'Copied' : 'Copy' }}</span>
-                    </button>
-                    <button 
-                      (click)="shareAdvice(option.reply)"
-                      class="flex items-center justify-center w-12 h-12 rounded-2xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all"
-                      title="Share Advice"
-                    >
-                      <mat-icon class="text-xl">share</mat-icon>
-                    </button>
+          
+          <div class="grid grid-cols-1 gap-8">
+            @for (option of responses()!.options; track option.title; let i = $index) {
+              <div class="glass-surface rounded-[2.5rem] p-10 group hover:bg-white/[0.06] transition-all duration-700 hover:-translate-y-1">
+                <div class="flex justify-between items-start">
+                  <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-6">
+                      <span class="w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(234,88,12,0.8)]"></span>
+                      <h3 class="text-[10px] uppercase tracking-[0.4em] text-gray-400 font-black">{{ option.title }}</h3>
+                    </div>
+                    <p class="text-2xl font-light text-gray-100 leading-relaxed tracking-tight selection:bg-orange-500/30">"{{ option.reply }}"</p>
                   </div>
-                  
-                  <div class="flex gap-1.5">
-                    <div class="w-1.5 h-1.5 rounded-full bg-orange-500/20"></div>
-                    <div class="w-1.5 h-1.5 rounded-full bg-orange-500/20"></div>
-                  </div>
+                  <button (click)="copyToClipboard(option.reply, i)"
+                          class="ml-8 p-5 rounded-full glass-surface hover:bg-orange-600 transition-all group/btn shadow-xl active:scale-90 relative overflow-hidden"
+                          [title]="copiedState()[i] ? 'Copied!' : 'Copy'">
+                    <div class="absolute inset-0 bg-white/10 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>
+                    @if (copiedState()[i]) {
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                      </svg>
+                    } @else {
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 group-hover/btn:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                    }
+                  </button>
                 </div>
-              </article>
+              </div>
             }
           </div>
-
-          <!-- Analysis Card -->
-          <div class="glass-surface rounded-[4rem] p-16 border border-white/5 relative overflow-hidden group shadow-2xl">
-            <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-500/[0.03] blur-[150px] rounded-full -mr-48 -mt-48"></div>
-            <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-emerald-500/[0.02] blur-[150px] rounded-full -ml-48 -mb-48"></div>
-            
-            <div class="relative z-10">
-              <div class="flex items-center gap-8 mb-12">
-                <div class="w-20 h-20 rounded-3xl bg-emerald-500/5 flex items-center justify-center border border-emerald-500/10 shadow-inner">
-                  <mat-icon class="text-emerald-500 text-4xl">psychology</mat-icon>
-                </div>
-                <div>
-                  <h3 class="text-white text-4xl font-black tracking-tight">STRATEGIC ANALYSIS</h3>
-                  <p class="text-gray-500 text-[10px] uppercase tracking-[0.4em] font-bold">Psychological insights & behavioral dynamics</p>
-                </div>
-              </div>
-              
-              <div class="max-w-4xl">
-                <p class="text-gray-400 text-2xl leading-relaxed font-light italic">
-                  {{ responses()?.analysis }}
-                </p>
-              </div>
-              
-              <div class="mt-12 flex items-center gap-4">
-                <span class="w-12 h-px bg-white/10"></span>
-                <span class="text-[9px] font-bold uppercase tracking-[0.5em] text-gray-700">Confidential Briefing</span>
-                <span class="w-12 h-px bg-white/10"></span>
-              </div>
-            </div>
-          </div>
-        </section>
+        </div>
       }
     }
   </div>
-}
 
   <!-- Camera Modal -->
   @if (isCameraOpen()) {
@@ -443,9 +318,4 @@
     </div>
   }
 
-  @if (showScrollTop()) {
-    <button (click)="scrollToTop()" class="fixed bottom-8 right-8 z-[90] w-14 h-14 rounded-2xl glass-surface border border-white/10 text-orange-500 shadow-2xl flex items-center justify-center hover:scale-110 active:scale-90 transition-all animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <mat-icon class="text-2xl">arrow_upward</mat-icon>
-    </button>
-  }
 </main>
