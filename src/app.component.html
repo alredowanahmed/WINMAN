@@ -7,52 +7,52 @@
       Exit Admin
     </button>
   } @else {
-    <div class="w-full max-w-6xl mx-auto z-10">
+    <div class="w-full max-w-5xl mx-auto z-10">
     
     <!-- Header -->
-    <header class="text-center mb-12 relative pt-8">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 mb-6 animate-in fade-in slide-in-from-top-4 duration-700">
-        <span class="flex h-2 w-2 rounded-full bg-orange-500 animate-pulse"></span>
-        <span class="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500">AI Dating Coach</span>
+    <header class="text-center mb-16 relative pt-12">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/5 border border-orange-500/10 mb-8 animate-in fade-in slide-in-from-top-4 duration-1000">
+        <span class="flex h-1.5 w-1.5 rounded-full bg-orange-500 animate-pulse"></span>
+        <span class="text-[9px] font-bold uppercase tracking-[0.3em] text-orange-500/80">Premium AI Dating Coach</span>
       </div>
       
-      <h1 class="text-6xl sm:text-7xl font-black tracking-tighter text-white mb-4 text-glow animate-in fade-in slide-in-from-top-8 duration-1000 font-display">
-        Desi <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500 italic">Wingman</span>
+      <h1 class="text-7xl sm:text-8xl font-black tracking-tighter text-white mb-6 text-glow animate-in fade-in slide-in-from-top-8 duration-1000 font-display">
+        Desi <span class="text-transparent bg-clip-text bg-gradient-to-b from-orange-400 to-orange-600 italic">Wingman</span>
       </h1>
-      <p class="text-gray-400 text-lg font-light tracking-wide animate-in fade-in slide-in-from-top-4 duration-1000 delay-200 max-w-lg mx-auto leading-relaxed">
-        Master the modern <span class="text-white font-medium">Desi scene</span>. Expert advice for every chat, from first texts to deep convos.
+      <p class="text-gray-500 text-xl font-light tracking-tight animate-in fade-in slide-in-from-top-4 duration-1000 delay-200 max-w-xl mx-auto leading-relaxed">
+        Elevate your <span class="text-white font-medium">dating game</span> with AI-powered insights. From first texts to deep connections, we've got your back.
       </p>
       
-      <div class="flex flex-wrap justify-center gap-3 mt-10 animate-in fade-in slide-in-from-top-2 duration-1000 delay-500">
-        <button (click)="toggleHistory()" class="group inline-flex items-center gap-2 glass-surface px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-white transition-all hover:scale-105 active:scale-95 border border-white/5">
-          <mat-icon class="text-sm">history</mat-icon>
+      <div class="flex flex-wrap justify-center gap-4 mt-12 animate-in fade-in slide-in-from-top-2 duration-1000 delay-500">
+        <button (click)="toggleHistory()" class="group inline-flex items-center gap-2.5 glass-surface px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-white transition-all hover:scale-105 active:scale-95 border border-white/5">
+          <mat-icon class="text-base">history</mat-icon>
           {{ showHistory() ? 'Back to App' : 'History' }}
         </button>
         
-        <button (click)="openKeySelector()" class="group inline-flex items-center gap-2 glass-surface px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 border border-white/5" [class.text-orange-500]="!hasApiKey()" [class.text-gray-400]="hasApiKey()" [class.hover:text-white]="hasApiKey()">
-          <mat-icon class="text-sm">vpn_key</mat-icon>
+        <button (click)="openKeySelector()" class="group inline-flex items-center gap-2.5 glass-surface px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all hover:scale-105 active:scale-95 border border-white/5" [class.text-orange-500]="!hasApiKey()" [class.text-gray-400]="hasApiKey()" [class.hover:text-white]="hasApiKey()">
+          <mat-icon class="text-base">vpn_key</mat-icon>
           {{ hasApiKey() ? 'API Key Set' : 'Set API Key' }}
         </button>
 
-        <button (click)="toggleSettings()" class="group inline-flex items-center gap-2 glass-surface px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-white transition-all hover:scale-105 active:scale-95 border border-white/5">
-          <mat-icon class="text-sm">settings</mat-icon>
+        <button (click)="toggleSettings()" class="group inline-flex items-center gap-2.5 glass-surface px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-white transition-all hover:scale-105 active:scale-95 border border-white/5">
+          <mat-icon class="text-base">settings</mat-icon>
           Settings
         </button>
 
         @if (user()) {
           @if (user()?.email === 'fahimdj071@gmail.com') {
-            <button (click)="toggleAdminView()" class="group inline-flex items-center gap-2 glass-surface px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest text-orange-500 hover:text-orange-400 transition-all hover:scale-105 active:scale-95 border border-orange-500/20">
-              <mat-icon class="text-sm">admin_panel_settings</mat-icon>
+            <button (click)="toggleAdminView()" class="group inline-flex items-center gap-2.5 glass-surface px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest text-orange-500 hover:text-orange-400 transition-all hover:scale-105 active:scale-95 border border-orange-500/20">
+              <mat-icon class="text-base">admin_panel_settings</mat-icon>
               Admin
             </button>
           }
-          <button (click)="logout()" class="group inline-flex items-center gap-2 glass-surface px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-white transition-all hover:scale-105 active:scale-95 border border-white/5">
-            <mat-icon class="text-sm">logout</mat-icon>
+          <button (click)="logout()" class="group inline-flex items-center gap-2.5 glass-surface px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-white transition-all hover:scale-105 active:scale-95 border border-white/5">
+            <mat-icon class="text-base">logout</mat-icon>
             Logout
           </button>
         } @else {
-          <button (click)="login()" class="group inline-flex items-center gap-2 glass-surface px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest text-orange-500 hover:text-orange-400 transition-all hover:scale-105 active:scale-95 border border-orange-500/20">
-            <mat-icon class="text-sm">login</mat-icon>
+          <button (click)="login()" class="group inline-flex items-center gap-2.5 glass-surface px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest text-orange-500 hover:text-orange-400 transition-all hover:scale-105 active:scale-95 border border-orange-500/20">
+            <mat-icon class="text-base">login</mat-icon>
             Login
           </button>
         }
@@ -61,64 +61,64 @@
 
     <!-- Settings Modal -->
     @if (showSettings()) {
-      <div class="fixed inset-0 z-[100] flex items-center justify-center p-6 animate-in fade-in duration-300">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-xl" (click)="toggleSettings()"></div>
-        <div class="relative w-full max-w-lg glass-surface rounded-[3rem] p-10 shadow-2xl animate-in zoom-in-95 duration-300">
-          <div class="flex justify-between items-center mb-8">
-            <h2 class="text-2xl font-light tracking-tight text-white">Settings</h2>
-            <button (click)="toggleSettings()" class="p-2 text-gray-400 hover:text-white transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
+      <div class="fixed inset-0 z-[100] flex items-center justify-center p-6 animate-in fade-in duration-500">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-2xl" (click)="toggleSettings()"></div>
+        <div class="relative w-full max-w-xl glass-surface rounded-[4rem] p-12 shadow-2xl animate-in zoom-in-95 duration-500 border border-white/10">
+          <div class="flex justify-between items-center mb-12">
+            <div>
+              <h2 class="text-3xl font-black tracking-tight text-white">SETTINGS</h2>
+              <p class="text-gray-500 text-[9px] uppercase tracking-[0.3em] font-bold">Configure your experience</p>
+            </div>
+            <button (click)="toggleSettings()" class="p-4 rounded-2xl bg-white/5 text-gray-400 hover:text-white transition-all hover:rotate-90">
+              <mat-icon>close</mat-icon>
             </button>
           </div>
 
-          <div class="space-y-8">
+          <div class="space-y-12">
             <div>
-              <label class="block text-[10px] uppercase tracking-[0.3em] text-orange-500 font-black mb-4">Gemini API Key</label>
-              <div class="relative">
+              <label class="block text-[10px] uppercase tracking-[0.4em] text-orange-500 font-black mb-6">Gemini API Key</label>
+              <div class="relative group">
                 <input
                   type="password"
                   [value]="manualApiKey()"
                   (input)="manualApiKey.set($any($event.target).value)"
                   placeholder="Enter your API Key..."
-                  class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-white/20 focus:outline-none focus:border-orange-500/50 transition-all"
+                  class="w-full bg-white/[0.02] border border-white/5 rounded-[2rem] px-8 py-6 text-white placeholder:text-gray-800 focus:outline-none focus:border-orange-500/30 focus:ring-8 focus:ring-orange-500/5 transition-all text-lg font-light"
                 />
+                <div class="absolute inset-y-0 right-6 flex items-center">
+                  <mat-icon class="text-gray-800 group-focus-within:text-orange-500/50 transition-colors">vpn_key</mat-icon>
+                </div>
               </div>
-              <p class="mt-4 text-[11px] text-gray-500 leading-relaxed">
+              <p class="mt-6 text-[11px] text-gray-500 leading-relaxed font-light">
                 Your API key is stored locally in your browser. It is used to power the Wingman's AI.
-                Get one for free at <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-orange-500 hover:underline">Google AI Studio</a>.
+                Get one for free at <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-orange-500 hover:underline font-medium">Google AI Studio</a>.
               </p>
             </div>
 
             <button
               (click)="saveManualKey()"
-              class="w-full py-5 rounded-2xl bg-orange-600 text-white text-xs font-black uppercase tracking-[0.3em] shadow-xl hover:bg-orange-500 transition-all active:scale-95"
+              class="w-full py-6 rounded-[2rem] bg-gradient-to-b from-orange-500 to-orange-700 text-white text-[11px] font-black uppercase tracking-[0.4em] shadow-2xl hover:scale-[1.02] transition-all active:scale-[0.98] btn-glow"
             >
               Save Configuration
             </button>
 
-            <div class="pt-8 border-t border-white/10">
-              <h3 class="text-[10px] uppercase tracking-[0.3em] text-teal-500 font-black mb-6">Support the Developer</h3>
-              <div class="grid grid-cols-2 gap-4">
-                <a href="#" class="glass-surface rounded-2xl p-4 flex items-center gap-3 hover:bg-white/10 transition-all group">
-                  <div class="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center text-yellow-500 group-hover:scale-110 transition-transform">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
+            <div class="pt-10 border-t border-white/5">
+              <h3 class="text-[9px] uppercase tracking-[0.4em] text-emerald-500 font-black mb-8">Support the Developer</h3>
+              <div class="grid grid-cols-2 gap-6">
+                <a href="#" class="glass-surface rounded-[2rem] p-6 flex items-center gap-4 hover:bg-white/[0.05] transition-all group border border-white/5">
+                  <div class="w-12 h-12 rounded-2xl bg-yellow-500/5 flex items-center justify-center text-yellow-500 group-hover:scale-110 transition-transform border border-yellow-500/10">
+                    <mat-icon>bolt</mat-icon>
                   </div>
-                  <span class="text-[10px] font-bold uppercase tracking-widest text-gray-300">bKash</span>
+                  <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400 group-hover:text-white transition-colors">bKash</span>
                 </a>
-                <a href="#" class="glass-surface rounded-2xl p-4 flex items-center gap-3 hover:bg-white/10 transition-all group">
-                  <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
+                <a href="#" class="glass-surface rounded-[2rem] p-6 flex items-center gap-4 hover:bg-white/[0.05] transition-all group border border-white/5">
+                  <div class="w-12 h-12 rounded-2xl bg-blue-500/5 flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform border border-blue-500/10">
+                    <mat-icon>coffee</mat-icon>
                   </div>
-                  <span class="text-[10px] font-bold uppercase tracking-widest text-gray-300">Coffee</span>
+                  <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400 group-hover:text-white transition-colors">Coffee</span>
                 </a>
               </div>
-              <p class="mt-4 text-[10px] text-gray-600 text-center italic">Your support helps keep the Wingman online!</p>
+              <p class="mt-6 text-[10px] text-gray-700 text-center italic font-light">Your support helps keep the Wingman online!</p>
             </div>
           </div>
         </div>
@@ -127,71 +127,73 @@
 
     @if (showHistory()) {
       <!-- History Section -->
-      <div class="glass-surface rounded-[3rem] p-10 shadow-2xl border border-white/5 animate-in fade-in zoom-in-95 duration-500">
-        <div class="flex justify-between items-center mb-10">
-          <div class="flex items-center gap-4">
-            <div class="w-12 h-12 rounded-2xl bg-orange-500/10 flex items-center justify-center border border-orange-500/20">
-              <mat-icon class="text-orange-500">history</mat-icon>
+      <div class="glass-surface rounded-[4rem] p-12 shadow-2xl border border-white/5 animate-in fade-in zoom-in-95 duration-1000">
+        <div class="flex justify-between items-center mb-12">
+          <div class="flex items-center gap-6">
+            <div class="w-16 h-16 rounded-2xl bg-orange-500/5 flex items-center justify-center border border-orange-500/10">
+              <mat-icon class="text-orange-500 text-3xl">history</mat-icon>
             </div>
             <div>
-              <h2 class="text-2xl font-black tracking-tight text-white">HISTORY</h2>
-              <p class="text-gray-500 text-[10px] uppercase tracking-[0.2em] font-black">Your past dating plays</p>
+              <h2 class="text-3xl font-black tracking-tight text-white">THE VAULT</h2>
+              <p class="text-gray-500 text-[9px] uppercase tracking-[0.3em] font-bold">Your past dating plays</p>
             </div>
           </div>
           @if (historyItems().length > 0) {
-            <button (click)="clearHistory()" class="px-6 py-2.5 rounded-xl bg-red-500/10 text-red-500 text-[10px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all">
+            <button (click)="clearHistory()" class="px-8 py-3 rounded-2xl bg-red-500/5 text-red-500 text-[10px] font-bold uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all border border-red-500/10">
               Clear All
             </button>
           }
         </div>
         
         @if (historyItems().length === 0) {
-          <div class="text-center py-24 glass-surface rounded-3xl border border-dashed border-white/10">
-            <mat-icon class="text-gray-700 text-6xl mb-4">history_toggle_off</mat-icon>
-            <p class="text-gray-500 text-lg font-light">No history yet. Start asking for advice!</p>
+          <div class="text-center py-32 glass-surface rounded-[3rem] border border-dashed border-white/5">
+            <mat-icon class="text-gray-800 text-7xl mb-6">history_toggle_off</mat-icon>
+            <p class="text-gray-500 text-xl font-light">Your vault is empty. Time to make some moves.</p>
           </div>
         } @else {
-          <div class="grid grid-cols-1 gap-6 max-h-[600px] overflow-y-auto pr-4 custom-scrollbar">
+          <div class="grid grid-cols-1 gap-8 max-h-[700px] overflow-y-auto pr-6 custom-scrollbar">
             @for (item of historyItems(); track item.timestamp) {
-              <div class="glass-surface rounded-3xl p-6 border border-white/5 hover:bg-white/5 transition-all group">
-                <div class="flex justify-between items-start mb-6">
-                  <span class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-600">{{ item.timestamp | date:'medium' }}</span>
-                  <div class="flex gap-1">
-                    <div class="w-1 h-1 rounded-full bg-orange-500/30"></div>
-                    <div class="w-1 h-1 rounded-full bg-orange-500/30"></div>
+              <div class="glass-surface rounded-[3rem] p-10 border border-white/5 hover:bg-white/[0.02] transition-all group relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-orange-500/20 group-hover:bg-orange-500 transition-colors"></div>
+                
+                <div class="flex justify-between items-start mb-8">
+                  <span class="text-[9px] font-bold uppercase tracking-[0.3em] text-gray-700">{{ item.timestamp | date:'medium' }}</span>
+                  <div class="flex gap-1.5">
+                    <div class="w-1.5 h-1.5 rounded-full bg-orange-500/20"></div>
+                    <div class="w-1.5 h-1.5 rounded-full bg-orange-500/20"></div>
                   </div>
                 </div>
                 
-                <div class="flex gap-6 items-start mb-8">
+                <div class="flex gap-10 items-start mb-10">
                   @if (item.imagePreviewUrl) {
-                    <div class="relative flex-shrink-0">
-                      <img [src]="item.imagePreviewUrl" class="w-20 h-20 object-cover rounded-2xl border border-white/10 shadow-lg" alt="Uploaded screenshot">
-                      <div class="absolute inset-0 bg-orange-500/10 rounded-2xl"></div>
+                    <div class="relative flex-shrink-0 group/img">
+                      <img [src]="item.imagePreviewUrl" class="w-28 h-28 object-cover rounded-3xl border border-white/10 shadow-2xl transition-transform group-hover/img:scale-105" alt="Uploaded screenshot">
+                      <div class="absolute inset-0 bg-orange-500/5 rounded-3xl"></div>
                     </div>
                   }
                   @if (item.userInput) {
                     <div class="flex-1">
-                      <span class="text-[9px] font-black uppercase tracking-[0.2em] text-orange-500/60 block mb-2">The Context</span>
-                      <p class="text-base font-light text-gray-300 italic leading-relaxed">"{{ item.userInput }}"</p>
+                      <span class="text-[9px] font-bold uppercase tracking-[0.3em] text-orange-500/40 block mb-3">The Context</span>
+                      <p class="text-xl font-light text-gray-400 italic leading-relaxed">"{{ item.userInput }}"</p>
                     </div>
                   }
                 </div>
                 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   @for (option of item.responses.options; track $index) {
-                    <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5 group/reply relative">
-                      <span class="text-[8px] font-black uppercase tracking-widest text-orange-500/60 block mb-1">{{ option.title }}</span>
-                      <p class="text-sm text-gray-400 leading-relaxed pr-16 line-clamp-2">"{{ option.reply }}"</p>
-                      <div class="absolute top-4 right-4 flex gap-2">
+                    <div class="p-6 rounded-[2rem] bg-white/[0.01] border border-white/5 group/reply relative hover:bg-white/[0.03] transition-all">
+                      <span class="text-[8px] font-bold uppercase tracking-widest text-orange-500/40 block mb-2">{{ option.title }}</span>
+                      <p class="text-base text-gray-500 leading-relaxed pr-20 line-clamp-2 font-light italic">"{{ option.reply }}"</p>
+                      <div class="absolute top-6 right-6 flex gap-3 opacity-0 group-hover/reply:opacity-100 transition-opacity">
                         <button (click)="copyToClipboard(option.reply, item.timestamp + $index)"
-                                class="text-gray-600 hover:text-white transition-colors"
+                                class="p-2 rounded-lg bg-white/5 text-gray-500 hover:text-white transition-colors"
                                 [title]="copiedState()[item.timestamp + $index] ? 'Copied!' : 'Copy'">
-                          <mat-icon class="text-sm">{{ copiedState()[item.timestamp + $index] ? 'done' : 'content_copy' }}</mat-icon>
+                          <mat-icon class="text-base">{{ copiedState()[item.timestamp + $index] ? 'done' : 'content_copy' }}</mat-icon>
                         </button>
                         <button (click)="shareAdvice(option.reply)"
-                                class="text-gray-600 hover:text-white transition-colors"
+                                class="p-2 rounded-lg bg-white/5 text-gray-500 hover:text-white transition-colors"
                                 title="Share">
-                          <mat-icon class="text-sm">share</mat-icon>
+                          <mat-icon class="text-base">share</mat-icon>
                         </button>
                       </div>
                     </div>
@@ -202,119 +204,116 @@
           </div>
         }
       </div>
-    } @else {
-      <!-- Bento Grid Layout -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    }
+ @else {
+      <!-- Focused Layout -->
+      <div class="flex flex-col gap-12">
         
-        <!-- Main Input Column -->
-        <div class="lg:col-span-8 space-y-8">
-          <section class="glass-surface rounded-[3rem] p-10 shadow-2xl animate-in fade-in zoom-in-95 duration-700 border border-white/5 relative overflow-hidden group">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-orange-500/30 to-transparent"></div>
+        <!-- Main Input Section -->
+        <section class="glass-surface rounded-[4rem] p-12 shadow-2xl animate-in fade-in zoom-in-95 duration-1000 border border-white/5 relative overflow-hidden group">
+          <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-orange-500/20 to-transparent"></div>
+          
+          <div class="flex items-center justify-between mb-12">
+            <div class="flex items-center gap-5">
+              <div class="w-14 h-14 rounded-2xl bg-orange-500/5 flex items-center justify-center border border-orange-500/10">
+                <mat-icon class="text-orange-500 text-2xl">chat_bubble_outline</mat-icon>
+              </div>
+              <div>
+                <h2 class="text-2xl font-black tracking-tight text-white">THE CONVERSATION</h2>
+                <p class="text-gray-500 text-[9px] uppercase tracking-[0.3em] font-bold">Input her message below</p>
+              </div>
+            </div>
             
-            <div class="flex items-center justify-between mb-10">
-              <div class="flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-orange-500/10 flex items-center justify-center border border-orange-500/20">
-                  <mat-icon class="text-orange-500">chat_bubble_outline</mat-icon>
-                </div>
-                <div>
-                  <h2 class="text-xl font-black tracking-tight text-white">THE CONVERSATION</h2>
-                  <p class="text-gray-500 text-[10px] uppercase tracking-[0.2em] font-black">Input her message below</p>
-                </div>
-              </div>
-              
-              <div class="flex gap-3">
-                <button (click)="openCamera()" class="p-4 rounded-2xl bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all group/btn" title="Take Photo">
-                  <mat-icon class="text-xl">photo_camera</mat-icon>
-                </button>
-                <label for="file-upload" class="p-4 rounded-2xl bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer group/btn" title="Upload Screenshot">
-                  <mat-icon class="text-xl">image</mat-icon>
-                  <input id="file-upload" type="file" class="hidden" (change)="onFileChange($event)" accept="image/*">
-                </label>
-              </div>
-            </div>
-
-            <!-- Image Preview -->
-            @if (uploadedImage().previewUrl) {
-              <div class="mb-10 relative group/img animate-in fade-in zoom-in-95 duration-500">
-                <img [src]="uploadedImage().previewUrl" class="w-full h-64 object-cover rounded-[2rem] border border-white/10 shadow-2xl" referrerpolicy="no-referrer">
-                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity rounded-[2rem] flex items-center justify-center">
-                  <button (click)="clearInput()" class="p-4 rounded-full bg-red-500 text-white shadow-2xl hover:scale-110 transition-transform">
-                    <mat-icon>close</mat-icon>
-                  </button>
-                </div>
-                @if (isExtractingText()) {
-                  <div class="absolute inset-0 bg-black/60 backdrop-blur-md rounded-[2rem] flex flex-col items-center justify-center gap-4">
-                    <div class="flex gap-2">
-                      <div class="w-2 h-2 bg-orange-500 rounded-full animate-bounce"></div>
-                      <div class="w-2 h-2 bg-orange-500 rounded-full animate-bounce [animation-delay:0.2s]"></div>
-                      <div class="w-2 h-2 bg-orange-500 rounded-full animate-bounce [animation-delay:0.4s]"></div>
-                    </div>
-                    <span class="text-[10px] font-black uppercase tracking-[0.3em] text-white">Reading Screenshot...</span>
-                  </div>
-                }
-              </div>
-            }
-
-            <div class="relative mb-10">
-              <textarea 
-                [(ngModel)]="userInput"
-                placeholder="Paste her message here or describe the situation..."
-                class="w-full bg-white/5 border border-white/10 rounded-[2rem] p-8 text-white placeholder-gray-700 focus:outline-none focus:border-orange-500/50 focus:ring-4 focus:ring-orange-500/10 transition-all min-h-[220px] text-xl leading-relaxed resize-none"
-              ></textarea>
-              
-              <div class="absolute bottom-6 right-6 flex items-center gap-4">
-                @if (userInput()) {
-                  <button (click)="clearInput()" class="text-gray-600 hover:text-gray-400 text-[10px] font-black uppercase tracking-widest transition-colors">
-                    Clear
-                  </button>
-                }
-              </div>
-            </div>
-
-            <button 
-              (click)="getHelp()"
-              [disabled]="isLoading() || (!userInput() && !uploadedImage().file)"
-              class="w-full py-6 rounded-2xl bg-gradient-to-r from-orange-600 to-red-600 text-white text-[11px] font-black uppercase tracking-[0.4em] shadow-[0_0_40px_rgba(234,88,12,0.3)] hover:shadow-[0_0_60px_rgba(234,88,12,0.5)] hover:scale-[1.01] transition-all active:scale-[0.98] disabled:opacity-50 disabled:grayscale relative overflow-hidden group/btn"
-            >
-              <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-1000 skew-x-12"></div>
-              
-              <div class="flex items-center justify-center gap-3 relative z-10">
-                @if (isLoading()) {
-                  <div class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                  <span>Analyzing...</span>
-                } @else {
-                  <mat-icon class="text-xl">bolt</mat-icon>
-                  <span>Get Expert Advice</span>
-                }
-              </div>
-            </button>
-          </section>
-        </div>
-
-        <!-- Sidebar Column -->
-        <div class="lg:col-span-4 space-y-8">
-          <!-- Quick Stats/Tips Bento -->
-          <div class="grid grid-cols-1 gap-6">
-            <div class="glass-surface p-8 rounded-[2.5rem] border border-white/5 flex flex-col justify-between group hover:bg-white/5 transition-all">
-              <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 mb-6">
-                <mat-icon class="text-emerald-500">security</mat-icon>
-              </div>
-              <div>
-                <h3 class="text-white font-black text-sm tracking-tight mb-2">100% PRIVATE</h3>
-                <p class="text-gray-500 text-xs leading-relaxed">Your conversations are never stored on our servers.</p>
-              </div>
-            </div>
-
-            <div class="glass-surface p-8 rounded-[2.5rem] border border-white/5 flex flex-col justify-between group hover:bg-white/5 transition-all">
-              <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20 mb-6">
-                <mat-icon class="text-blue-500">auto_awesome</mat-icon>
-              </div>
-              <div>
-                <h3 class="text-white font-black text-sm tracking-tight mb-2">AI POWERED</h3>
-                <p class="text-gray-500 text-xs leading-relaxed">Advanced Gemini models trained on modern dating dynamics.</p>
-              </div>
+            <div class="flex gap-4">
+              <button (click)="openCamera()" class="p-5 rounded-2xl bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all group/btn" title="Take Photo">
+                <mat-icon class="text-2xl">photo_camera</mat-icon>
+              </button>
+              <label for="file-upload" class="p-5 rounded-2xl bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer group/btn" title="Upload Screenshot">
+                <mat-icon class="text-2xl">image</mat-icon>
+                <input id="file-upload" type="file" class="hidden" (change)="onFileChange($event)" accept="image/*">
+              </label>
             </div>
           </div>
+
+          <!-- Image Preview -->
+          @if (uploadedImage().previewUrl) {
+            <div class="mb-12 relative group/img animate-in fade-in zoom-in-95 duration-700">
+              <img [src]="uploadedImage().previewUrl" class="w-full h-80 object-cover rounded-[3rem] border border-white/10 shadow-2xl" referrerpolicy="no-referrer">
+              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity rounded-[3rem] flex items-center justify-center">
+                <button (click)="clearInput()" class="p-5 rounded-full bg-red-500 text-white shadow-2xl hover:scale-110 transition-transform">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+              @if (isExtractingText()) {
+                <div class="absolute inset-0 bg-black/60 backdrop-blur-xl rounded-[3rem] flex flex-col items-center justify-center gap-6">
+                  <div class="flex gap-3">
+                    <div class="w-2.5 h-2.5 bg-orange-500 rounded-full animate-bounce"></div>
+                    <div class="w-2.5 h-2.5 bg-orange-500 rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                    <div class="w-2.5 h-2.5 bg-orange-500 rounded-full animate-bounce [animation-delay:0.4s]"></div>
+                  </div>
+                  <span class="text-[10px] font-bold uppercase tracking-[0.4em] text-white">Reading Screenshot...</span>
+                </div>
+              }
+            </div>
+          }
+
+          <div class="relative mb-12">
+            <textarea 
+              [(ngModel)]="userInput"
+              placeholder="Paste her message here or describe the situation..."
+              class="w-full bg-white/[0.02] border border-white/5 rounded-[3rem] p-10 text-white placeholder-gray-800 focus:outline-none focus:border-orange-500/30 focus:ring-8 focus:ring-orange-500/5 transition-all min-h-[280px] text-2xl font-light leading-relaxed resize-none"
+            ></textarea>
+            
+            <div class="absolute bottom-8 right-10 flex items-center gap-6">
+              @if (userInput()) {
+                <button (click)="clearInput()" class="text-gray-700 hover:text-gray-500 text-[9px] font-bold uppercase tracking-widest transition-colors">
+                  Clear
+                </button>
+              }
+            </div>
+          </div>
+
+          <button 
+            (click)="getHelp()"
+            [disabled]="isLoading() || (!userInput() && !uploadedImage().file)"
+            class="w-full py-8 rounded-[2rem] bg-gradient-to-b from-orange-500 to-orange-700 text-white text-[12px] font-black uppercase tracking-[0.5em] shadow-[0_20px_60px_rgba(234,88,12,0.2)] hover:shadow-[0_30px_80px_rgba(234,88,12,0.4)] hover:scale-[1.01] transition-all active:scale-[0.98] disabled:opacity-50 disabled:grayscale relative overflow-hidden group/btn btn-glow"
+          >
+            <div class="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-1000 skew-x-12"></div>
+            
+            <div class="flex items-center justify-center gap-4 relative z-10">
+              @if (isLoading()) {
+                <div class="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                <span>Analyzing...</span>
+              } @else {
+                <mat-icon class="text-2xl">bolt</mat-icon>
+                <span>Get Expert Advice</span>
+              }
+            </div>
+          </button>
+        </section>
+
+        <!-- Trust & Info Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="glass-surface p-10 rounded-[3rem] border border-white/5 flex items-center gap-8 group hover:bg-white/[0.02] transition-all">
+            <div class="w-16 h-16 rounded-3xl bg-emerald-500/5 flex items-center justify-center border border-emerald-500/10 group-hover:scale-110 transition-transform">
+              <mat-icon class="text-emerald-500 text-3xl">security</mat-icon>
+            </div>
+            <div>
+              <h3 class="text-white font-black text-base tracking-tight mb-1">100% PRIVATE</h3>
+              <p class="text-gray-500 text-sm leading-relaxed">Your conversations are never stored on our servers.</p>
+            </div>
+          </div>
+
+          <div class="glass-surface p-10 rounded-[3rem] border border-white/5 flex items-center gap-8 group hover:bg-white/[0.02] transition-all">
+            <div class="w-16 h-16 rounded-3xl bg-blue-500/5 flex items-center justify-center border border-blue-500/10 group-hover:scale-110 transition-transform">
+              <mat-icon class="text-blue-500 text-3xl">auto_awesome</mat-icon>
+            </div>
+            <div>
+              <h3 class="text-white font-black text-base tracking-tight mb-1">AI POWERED</h3>
+              <p class="text-gray-500 text-sm leading-relaxed">Advanced Gemini models trained on modern dating dynamics.</p>
+            </div>
+          </div>
+        </div>
 
           <!-- Ad Placement -->
           @for (ad of ads(); track ad.id) {
@@ -335,50 +334,54 @@
             }
           }
         </div>
-      </div>
 
       <!-- Results Section (Full Width) -->
       @if (responses() && !isLoading()) {
-        <section id="results" class="mt-16 space-y-12 animate-in fade-in slide-in-from-bottom-12 duration-1000">
-          <div class="text-center space-y-4">
-            <h2 class="text-4xl font-black tracking-tighter text-white font-display">THE GAME PLAN</h2>
-            <div class="h-1 w-24 bg-gradient-to-r from-orange-500 to-red-500 mx-auto rounded-full"></div>
+        <section id="results" class="mt-24 space-y-16 animate-in fade-in slide-in-from-bottom-12 duration-1000">
+          <div class="text-center space-y-6">
+            <div class="inline-flex items-center gap-3 px-4 py-1 rounded-full bg-orange-500/5 border border-orange-500/10 mb-2">
+              <span class="text-[9px] font-bold uppercase tracking-[0.4em] text-orange-500/80">Mission Accomplished</span>
+            </div>
+            <h2 class="text-5xl sm:text-6xl font-black tracking-tighter text-white font-display">THE STRATEGIC PLAN</h2>
+            <div class="h-1.5 w-32 bg-gradient-to-r from-transparent via-orange-500 to-transparent mx-auto rounded-full"></div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
             @for (option of responses()?.options; track $index) {
-              <article class="glass-surface rounded-[3rem] p-10 border border-white/5 relative group hover:border-orange-500/30 transition-all hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex flex-col h-full">
-                <div class="absolute -top-4 -left-4 w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-white font-black shadow-xl">
-                  0{{ $index + 1 }}
+              <article class="glass-surface rounded-[4rem] p-12 border border-white/5 relative group hover:border-orange-500/20 transition-all hover:shadow-[0_40px_80px_rgba(0,0,0,0.4)] flex flex-col h-full overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-orange-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                
+                <div class="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-gradient-to-br from-orange-500 to-orange-700 flex items-center justify-center text-white font-black shadow-2xl text-2xl z-10">
+                  {{ $index + 1 }}
                 </div>
                 
-                <div class="mb-8">
-                  <span class="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500 mb-2 block">{{ option.title }}</span>
-                  <p class="text-white text-xl font-medium leading-relaxed italic">"{{ option.reply }}"</p>
+                <div class="mb-10 relative z-10">
+                  <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-orange-500/60 mb-4 block">{{ option.title }}</span>
+                  <p class="text-white text-2xl font-light leading-relaxed italic tracking-tight">"{{ option.reply }}"</p>
                 </div>
 
-                <div class="mt-auto pt-8 border-t border-white/5 flex items-center justify-between">
-                  <div class="flex items-center gap-2">
+                <div class="mt-auto pt-10 border-t border-white/5 flex items-center justify-between relative z-10">
+                  <div class="flex items-center gap-4">
                     <button 
                       (click)="copyToClipboard(option.reply, $index)"
-                      class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-white transition-all"
+                      class="flex items-center gap-3 px-6 py-3 rounded-2xl bg-white/5 hover:bg-orange-500 text-white transition-all group/copy"
                       [title]="copiedState()[$index] ? 'Copied!' : 'Copy to Clipboard'"
                     >
-                      <mat-icon class="text-sm">{{ copiedState()[$index] ? 'done' : 'content_copy' }}</mat-icon>
-                      {{ copiedState()[$index] ? 'Copied' : 'Copy' }}
+                      <mat-icon class="text-xl">{{ copiedState()[$index] ? 'done' : 'content_copy' }}</mat-icon>
+                      <span class="text-[10px] font-bold uppercase tracking-widest">{{ copiedState()[$index] ? 'Copied' : 'Copy' }}</span>
                     </button>
                     <button 
                       (click)="shareAdvice(option.reply)"
-                      class="flex items-center justify-center w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 text-gray-500 hover:text-white transition-all"
+                      class="flex items-center justify-center w-12 h-12 rounded-2xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all"
                       title="Share Advice"
                     >
-                      <mat-icon class="text-sm">share</mat-icon>
+                      <mat-icon class="text-xl">share</mat-icon>
                     </button>
                   </div>
                   
-                  <div class="flex gap-1">
-                    <div class="w-1 h-1 rounded-full bg-orange-500/40"></div>
-                    <div class="w-1 h-1 rounded-full bg-orange-500/40"></div>
+                  <div class="flex gap-1.5">
+                    <div class="w-1.5 h-1.5 rounded-full bg-orange-500/20"></div>
+                    <div class="w-1.5 h-1.5 rounded-full bg-orange-500/20"></div>
                   </div>
                 </div>
               </article>
@@ -386,29 +389,39 @@
           </div>
 
           <!-- Analysis Card -->
-          <div class="glass-surface rounded-[3rem] p-12 border border-white/5 relative overflow-hidden group">
-            <div class="absolute top-0 right-0 w-96 h-96 bg-orange-500/5 blur-[120px] rounded-full"></div>
+          <div class="glass-surface rounded-[4rem] p-16 border border-white/5 relative overflow-hidden group shadow-2xl">
+            <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-500/[0.03] blur-[150px] rounded-full -mr-48 -mt-48"></div>
+            <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-emerald-500/[0.02] blur-[150px] rounded-full -ml-48 -mb-48"></div>
             
             <div class="relative z-10">
-              <div class="flex items-center gap-5 mb-10">
-                <div class="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
-                  <mat-icon class="text-emerald-500 text-3xl">psychology</mat-icon>
+              <div class="flex items-center gap-8 mb-12">
+                <div class="w-20 h-20 rounded-3xl bg-emerald-500/5 flex items-center justify-center border border-emerald-500/10 shadow-inner">
+                  <mat-icon class="text-emerald-500 text-4xl">psychology</mat-icon>
                 </div>
                 <div>
-                  <h3 class="text-white text-3xl font-black tracking-tight">Expert Analysis</h3>
-                  <p class="text-gray-500 text-[10px] uppercase tracking-[0.2em] font-black">The psychology behind the advice</p>
+                  <h3 class="text-white text-4xl font-black tracking-tight">STRATEGIC ANALYSIS</h3>
+                  <p class="text-gray-500 text-[10px] uppercase tracking-[0.4em] font-bold">Psychological insights & behavioral dynamics</p>
                 </div>
               </div>
               
-              <p class="text-gray-300 text-xl leading-relaxed font-light">
-                {{ responses()?.analysis }}
-              </p>
+              <div class="max-w-4xl">
+                <p class="text-gray-400 text-2xl leading-relaxed font-light italic">
+                  {{ responses()?.analysis }}
+                </p>
+              </div>
+              
+              <div class="mt-12 flex items-center gap-4">
+                <span class="w-12 h-px bg-white/10"></span>
+                <span class="text-[9px] font-bold uppercase tracking-[0.5em] text-gray-700">Confidential Briefing</span>
+                <span class="w-12 h-px bg-white/10"></span>
+              </div>
             </div>
           </div>
         </section>
       }
     }
   </div>
+}
 
   <!-- Camera Modal -->
   @if (isCameraOpen()) {
@@ -430,7 +443,6 @@
     </div>
   }
 
-  }
   @if (showScrollTop()) {
     <button (click)="scrollToTop()" class="fixed bottom-8 right-8 z-[90] w-14 h-14 rounded-2xl glass-surface border border-white/10 text-orange-500 shadow-2xl flex items-center justify-center hover:scale-110 active:scale-90 transition-all animate-in fade-in slide-in-from-bottom-4 duration-500">
       <mat-icon class="text-2xl">arrow_upward</mat-icon>

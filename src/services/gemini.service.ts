@@ -29,12 +29,6 @@ export class GeminiService {
     }
   }
 
-  private dataToGenerativePart(base64Data: string, mimeType: string) {
-    return {
-      inlineData: { data: base64Data, mimeType: mimeType },
-    };
-  }
-
   /**
    * Analyzes text for inappropriate content using a separate Gemini call.
    * Throws an error if the content is flagged as inappropriate.
@@ -84,37 +78,47 @@ Text to analyze: "${text}"`;
     }
   }
 
+  /**
+   * Converts image data to a generative part for the Gemini API.
+   */
+  private dataToGenerativePart(base64Data: string, mimeType: string) {
+    return {
+      inlineData: {
+        data: base64Data,
+        mimeType
+      },
+    };
+  }
 
+  /**
+   * Extracts text from an image using the Gemini API.
+   */
   async getTextFromImage(base64Data: string, mimeType: string): Promise<string> {
     const model = 'gemini-3-flash-preview';
-    const imagePart = this.dataToGenerativePart(base64Data, mimeType);
-    const prompt = "Extract all text from the provided image, which is a screenshot of a chat. Focus on transcribing the last message sent by the other person. Return only the transcribed text, without any additional comments, labels, or explanations.";
+    const prompt = "Extract only the text from this chat screenshot. If there are multiple messages, focus on the last message from the girl. Return only the text, no other commentary.";
 
     try {
       const response = await this.ai.models.generateContent({
         model,
-        contents: { parts: [imagePart, { text: prompt }] },
+        contents: {
+          parts: [
+            { text: prompt },
+            this.dataToGenerativePart(base64Data, mimeType)
+          ]
+        },
         config: {
           thinkingConfig: { thinkingLevel: ThinkingLevel.LOW }
         }
       });
-      const extractedText = response.text.trim();
 
-      // Safety Check
-      await this.checkForInappropriateContent(extractedText);
-      
-      return extractedText;
+      return response.text.trim();
     } catch (error) {
-      console.error('Error processing image:', error);
-      if (error instanceof Error && error.message.includes('inappropriate')) {
-        throw error; // Re-throw the specific safety error
-      }
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      throw new Error(`Could not process the screenshot: ${errorMessage}`);
+      console.error('Error extracting text from image:', error);
+      return '';
     }
   }
 
-  async generateReplies(userInput: string, base64Data?: string | null, mimeType?: string | null, history?: any[]): Promise<ApiResponse> {
+  async generateReplies(userInput: string, history?: any[], base64Data?: string, mimeType?: string): Promise<ApiResponse> {
     // Safety Check on user's direct text input
     await this.checkForInappropriateContent(userInput);
 
@@ -129,14 +133,7 @@ Your reply MUST match the linguistic style of the "Girl's" message provided by t
 3. English: If she writes "What's up?", you reply in casual, modern English.
 
 VISION/SCREENSHOT ANALYSIS PROTOCOL:
-If a screenshot is provided, you MUST perform a deep, nuanced analysis. This is critical.
-1.  **Identify her Messages:** Focus on the messages from her (typically gray/white bubbles).
-2.  **Analyze Timestamps for Pauses:** This is very important. Scrutinize the timestamps between messages. A long delay (hours) suggests lower interest or being busy, so your replies should be more casual. A quick reply suggests higher interest, allowing for more engaging or playful responses.
-3.  **Analyze Message Length & Effort:** Does she write full sentences or just one-word answers? Match her effort. Low effort from her means you should suggest cooler, less invested replies.
-4.  **Detect Engagement Cues (Crucial):**
-    - **Typing Indicators:** Actively look for a "typing..." bubble or animation in the screenshot. This is a very strong signal of active engagement. If you see it, the user can be more forward or playful.
-    - **Read Receipts:** Look for 'Seen', 'Read', or double-tick indicators. If the user's last message was seen a long time ago with no reply, this is a sign of disinterest. Your "Cool/Casual" option should reflect this by being detached or suggesting ending the conversation.
-5.  **Understand the Context:** Read the last 3-4 messages to grasp the conversation's flow, topic, and emotional tone. Use all these visual cues to refine the tone and strategy of your 3 reply options.
+If a screenshot is provided, analyze the visual context (emojis, tone, previous messages in the image) to provide a more tailored response.
 
 RESPONSE STRATEGY:
 For EVERY input, you MUST provide exactly 5 distinct options.
@@ -162,8 +159,6 @@ The user has provided the following context. Analyze it and generate the 5 reply
       for (const item of recentHistory) {
         if (item.userInput) {
           historyText += `She previously said: "${item.userInput}"\n`;
-        } else {
-          historyText += `User previously uploaded a screenshot.\n`;
         }
         historyText += `You suggested: ${item.responses.options.map((o: any) => o.reply).join(' | ')}\n\n`;
       }
@@ -171,23 +166,22 @@ The user has provided the following context. Analyze it and generate the 5 reply
       contents.push({ text: historyText });
     }
 
-    if (base64Data && mimeType) {
-      const imagePart = this.dataToGenerativePart(base64Data, mimeType);
-      contents.push(imagePart);
-    }
-
+    const parts: any[] = [];
     if (userInput) {
-      contents.push({ text: `Her CURRENT message text: "${userInput}"`});
+      parts.push({ text: `Her CURRENT message text: "${userInput}"`});
     }
 
-    if (base64Data && !userInput) {
-        contents.push({ text: "Analyze the CURRENT screenshot and provide replies to the last message from her."});
+    if (base64Data && mimeType) {
+      parts.push({ text: "I have also attached a screenshot of the conversation for more visual context." });
+      parts.push(this.dataToGenerativePart(base64Data, mimeType));
     }
+
+    contents.push({ parts });
 
     try {
       const response: GenerateContentResponse = await this.ai.models.generateContent({
         model,
-        contents: { parts: contents },
+        contents: contents,
         config: {
           thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
           responseMimeType: "application/json",
@@ -215,7 +209,7 @@ The user has provided the following context. Analyze it and generate the 5 reply
       const parsedResponse = JSON.parse(jsonText);
 
       if (!parsedResponse.options || parsedResponse.options.length < 1) {
-        throw new Error('Wingman is speechless... Try rephrasing or a different screenshot.');
+        throw new Error('Wingman is speechless... Try rephrasing.');
       }
       return parsedResponse as ApiResponse;
 
