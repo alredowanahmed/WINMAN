@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GoogleGenAI, GenerateContentResponse, Type } from '@google/genai';
+import { GoogleGenAI, GenerateContentResponse, Type, ThinkingLevel } from "@google/genai";
 import { environment } from '../environments/environment';
 
 export interface ReplyOption {
@@ -18,13 +18,14 @@ export class GeminiService {
   private ai: GoogleGenAI;
 
   constructor() {
-    const apiKey = environment.apiKey;
-    if (!apiKey) {
-      // In a real app, you'd have a more robust way to handle this,
-      // but for this environment, we throw an error to indicate a fatal misconfiguration.
-      throw new Error("API_KEY environment variable not set.");
+    this.reinitialize();
+  }
+
+  reinitialize() {
+    const apiKey = environment.apiKey || (typeof process !== 'undefined' ? process.env.API_KEY : '');
+    if (apiKey) {
+      this.ai = new GoogleGenAI({ apiKey });
     }
-    this.ai = new GoogleGenAI({ apiKey });
   }
 
   private dataToGenerativePart(base64Data: string, mimeType: string) {
@@ -42,7 +43,7 @@ export class GeminiService {
       return; // No need to check empty strings
     }
 
-    const model = 'gemini-2.5-flash';
+    const model = 'gemini-3-flash-preview';
     const safetyPrompt = `You are a content safety moderator. Analyze the following text to determine if it contains any explicit, harassing, hateful, threatening, or otherwise inappropriate content that violates community guidelines. Respond with only a JSON object. The object must have a key "inappropriate" (boolean) and, if true, a "reason" (string).
 
 Text to analyze: "${text}"`;
@@ -52,6 +53,7 @@ Text to analyze: "${text}"`;
         model,
         contents: { parts: [{ text: safetyPrompt }] },
         config: {
+          thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
           responseMimeType: 'application/json',
           responseSchema: {
             type: Type.OBJECT,
@@ -83,7 +85,7 @@ Text to analyze: "${text}"`;
 
 
   async getTextFromImage(base64Data: string, mimeType: string): Promise<string> {
-    const model = 'gemini-2.5-flash';
+    const model = 'gemini-3-flash-preview';
     const imagePart = this.dataToGenerativePart(base64Data, mimeType);
     const prompt = "Extract all text from the provided image, which is a screenshot of a chat. Focus on transcribing the last message sent by the other person. Return only the transcribed text, without any additional comments, labels, or explanations.";
 
@@ -91,6 +93,9 @@ Text to analyze: "${text}"`;
       const response = await this.ai.models.generateContent({
         model,
         contents: { parts: [imagePart, { text: prompt }] },
+        config: {
+          thinkingConfig: { thinkingLevel: ThinkingLevel.LOW }
+        }
       });
       const extractedText = response.text.trim();
 
@@ -112,7 +117,7 @@ Text to analyze: "${text}"`;
     // Safety Check on user's direct text input
     await this.checkForInappropriateContent(userInput);
 
-    const model = 'gemini-2.5-flash';
+    const model = 'gemini-3-flash-preview';
 
     const systemPrompt = `You are "Desi Wingman," an expert dating coach for the modern Bangladeshi dating scene. You are witty, culturally aware, and act as a supportive friend. Your goal is to help the user with replies for Tinder, Bumble, etc.
 
@@ -181,6 +186,7 @@ The user has provided the following context. Analyze it and generate the 3 reply
         model,
         contents: { parts: contents },
         config: {
+          thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
           responseMimeType: "application/json",
           responseSchema: {
             type: Type.OBJECT,

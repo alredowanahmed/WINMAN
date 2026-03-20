@@ -1,78 +1,86 @@
 
-<main class="min-h-screen bg-gray-900 text-gray-100 p-4 sm:p-6 md:p-8 flex flex-col items-center">
-  <div class="w-full max-w-2xl mx-auto">
+<main class="min-h-screen p-4 sm:p-6 md:p-8 flex flex-col items-center relative overflow-hidden">
+  
+  <div class="w-full max-w-2xl mx-auto z-10">
     
     <!-- Header -->
-    <header class="text-center mb-8 relative">
-      <h1 class="text-4xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500">
-        Desi Wingman
+    <header class="text-center mb-16 relative">
+      <h1 class="text-7xl sm:text-8xl font-bold tracking-tighter text-white mb-4 text-glow animate-in fade-in slide-in-from-top-8 duration-1000">
+        Desi <span class="text-orange-500 italic">Wingman</span>
       </h1>
-      <p class="text-gray-400 mt-2">Your AI dating coach for the modern BD scene.</p>
-      <button (click)="toggleHistory()" class="absolute right-0 top-0 mt-2 mr-2 text-sm text-teal-400 hover:text-teal-300 flex items-center gap-1 bg-gray-800 px-3 py-1.5 rounded-full border border-gray-700 shadow-sm transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        {{ showHistory() ? 'Back to App' : 'History' }}
-      </button>
+      <p class="text-gray-400 text-xl font-light tracking-wide animate-in fade-in slide-in-from-top-4 duration-1000 delay-200">
+        Your AI dating coach for the modern BD scene.
+      </p>
+      
+      <div class="flex justify-center gap-4 mt-8 animate-in fade-in slide-in-from-top-2 duration-1000 delay-500">
+        <button (click)="toggleHistory()" class="inline-flex items-center gap-2 glass-surface px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white transition-all hover:scale-105 active:scale-95">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          {{ showHistory() ? 'Back to App' : 'History' }}
+        </button>
+        
+        <button (click)="openKeySelector()" class="inline-flex items-center gap-2 glass-surface px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all hover:scale-105 active:scale-95" [class.text-orange-500]="!hasApiKey()" [class.text-gray-300]="hasApiKey()" [class.hover:text-white]="hasApiKey()">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+          </svg>
+          {{ hasApiKey() ? 'API Key Set' : 'Set API Key' }}
+        </button>
+      </div>
     </header>
 
     @if (showHistory()) {
       <!-- History Section -->
-      <div class="bg-gray-800 rounded-2xl p-6 shadow-2xl border border-gray-700">
-        <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl font-semibold text-gray-200">Your Past Wingman Advice</h2>
+      <div class="glass-surface rounded-3xl p-8 shadow-2xl">
+        <div class="flex justify-between items-center mb-8">
+          <h2 class="text-3xl font-light text-white">History</h2>
           @if (historyItems().length > 0) {
-            <button (click)="clearHistory()" class="text-sm text-red-400 hover:text-red-300 transition-colors">
+            <button (click)="clearHistory()" class="text-sm text-red-400/70 hover:text-red-400 transition-colors uppercase tracking-widest font-semibold">
               Clear All
             </button>
           }
         </div>
         
         @if (historyItems().length === 0) {
-          <div class="text-center py-10 text-gray-500">
-            <svg class="mx-auto h-12 w-12 text-gray-600 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-            </svg>
-            <p>No history yet. Start asking for advice!</p>
+          <div class="text-center py-20 text-gray-500">
+            <p class="text-xl font-light">No history yet. Start asking for advice!</p>
           </div>
         } @else {
-          <div class="space-y-6">
+          <div class="space-y-8">
             @for (item of historyItems(); track item.id) {
-              <div class="bg-gray-900 rounded-xl p-4 border border-gray-700">
-                <div class="text-xs text-gray-500 mb-3">{{ item.timestamp | date:'medium' }}</div>
+              <div class="border-b border-white/5 pb-8 last:border-0">
+                <div class="text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-4">{{ item.timestamp | date:'medium' }}</div>
                 
-                <!-- Input context -->
-                <div class="mb-4 flex gap-4 items-start">
+                <div class="mb-6 flex gap-6 items-start">
                   @if (item.imagePreviewUrl) {
-                    <img [src]="item.imagePreviewUrl" class="w-20 h-20 object-cover rounded-lg border border-gray-700" alt="Uploaded screenshot">
+                    <img [src]="item.imagePreviewUrl" class="w-24 h-24 object-cover rounded-2xl border border-white/10" alt="Uploaded screenshot">
                   }
                   @if (item.userInput) {
-                    <div class="bg-gray-800 p-3 rounded-lg text-sm text-gray-300 flex-1 border border-gray-700">
-                      <span class="text-gray-500 text-xs block mb-1">Her message:</span>
-                      "{{ item.userInput }}"
+                    <div class="flex-1">
+                      <span class="text-[10px] uppercase tracking-widest text-orange-500/70 block mb-1">Her message</span>
+                      <p class="text-lg font-light text-gray-200 italic">"{{ item.userInput }}"</p>
                     </div>
                   }
                 </div>
                 
-                <!-- Generated Options -->
-                <div class="space-y-3">
+                <div class="grid grid-cols-1 gap-4">
                   @for (option of item.responses.options; track option.title; let i = $index) {
-                    <div class="bg-gray-800 rounded-lg p-3 border border-gray-700">
+                    <div class="glass-surface rounded-2xl p-4 group relative">
                       <div class="flex justify-between items-start">
-                        <div>
-                          <span class="text-xs font-semibold text-teal-500 uppercase tracking-wider">{{ option.title }}</span>
-                          <p class="mt-1 text-sm text-gray-200 whitespace-pre-wrap">{{ option.reply }}</p>
+                        <div class="flex-1">
+                          <span class="text-[10px] uppercase tracking-widest text-teal-500 font-bold">{{ option.title }}</span>
+                          <p class="mt-1 text-sm text-gray-300 leading-relaxed">{{ option.reply }}</p>
                         </div>
                         <button (click)="copyToClipboard(option.reply, item.id! * 100 + i)"
-                                class="ml-2 flex-shrink-0 text-gray-500 hover:text-white transition-colors"
-                                [title]="copiedState()[item.id! * 100 + i] ? 'Copied!' : 'Copy reply'">
+                                class="ml-4 p-2 rounded-full hover:bg-white/10 transition-all"
+                                [title]="copiedState()[item.id! * 100 + i] ? 'Copied!' : 'Copy'">
                           @if (copiedState()[item.id! * 100 + i]) {
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-400" viewBox="0 0 20 20" fill="currentColor">
                               <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                             </svg>
                           } @else {
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                             </svg>
                           }
                         </button>
@@ -87,167 +95,176 @@
       </div>
     } @else {
       <!-- Input Section -->
-    <div class="bg-gray-800 rounded-2xl p-6 shadow-2xl border border-gray-700">
-      <div class="flex flex-col gap-4">
-        <div>
-          <label for="message" class="block text-sm font-medium text-gray-300 mb-2">
-            What did she say?
-          </label>
-          <textarea
-            id="message"
-            name="message"
-            rows="3"
-            [ngModel]="userInput()" 
-            (ngModelChange)="userInput.set($event)"
-            class="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 text-gray-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors placeholder-gray-500 disabled:opacity-70"
-            [placeholder]="isExtractingText() ? 'Reading screenshot...' : 'Type or paste her message here...'"
-            [disabled]="isExtractingText()"
-          ></textarea>
-        </div>
-
-        <div class="text-center text-gray-500 text-sm">OR</div>
-
-        <div>
-          <div class="flex justify-between items-center mb-2">
-            <label for="file-upload" class="block text-sm font-medium text-gray-300">
-              Upload a screenshot
+      <div class="glass-surface rounded-[2.5rem] p-10 shadow-2xl animate-in fade-in zoom-in-95 duration-700">
+        <div class="space-y-10">
+          <div>
+            <label for="message" class="text-[10px] uppercase tracking-[0.4em] text-gray-500 font-black block mb-6">
+              The Message
             </label>
-            <button type="button" (click)="openCamera()" class="text-sm font-semibold text-teal-400 hover:text-teal-300 focus:outline-none disabled:opacity-50" [disabled]="isLoading() || isExtractingText()">
-              or Use Camera
-            </button>
+            <textarea
+              id="message"
+              name="message"
+              rows="3"
+              [ngModel]="userInput()" 
+              (ngModelChange)="userInput.set($event)"
+              class="w-full bg-transparent border-b border-white/10 focus:border-orange-500 outline-none py-6 text-2xl font-light text-white transition-all placeholder-gray-800 disabled:opacity-50"
+              [placeholder]="isExtractingText() ? 'Reading...' : 'What did she say?'"
+              [disabled]="isExtractingText()"
+            ></textarea>
           </div>
-          <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-600 px-6 py-10">
-            <div class="text-center">
-              <svg class="mx-auto h-12 w-12 text-gray-500" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-              </svg>
-              <div class="mt-4 flex text-sm leading-6 text-gray-400">
-                <label for="file-upload" class="relative cursor-pointer rounded-md bg-gray-800 font-semibold text-teal-400 focus-within:outline-none focus-within:ring-2 focus-within:ring-teal-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-900 hover:text-teal-300">
-                  <span>Upload a file</span>
-                  <input id="file-upload" name="file-upload" type="file" class="sr-only" (change)="onFileChange($event)" accept="image/*">
-                </label>
-                <p class="pl-1">or drag and drop</p>
-              </div>
-              <p class="text-xs leading-5 text-gray-500">PNG, JPG, GIF up to 10MB</p>
-            </div>
-          </div>
-        </div>
 
-        @if (uploadedImage().previewUrl) {
-          <div class="mt-4">
-            <p class="text-sm font-medium text-gray-300 mb-2">Screenshot Preview:</p>
-            <div class="relative">
-              <img [src]="uploadedImage().previewUrl" alt="Screenshot preview" class="rounded-lg w-full max-w-sm mx-auto" [class.opacity-50]="isExtractingText()">
-              @if (isExtractingText()) {
-                <div class="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 rounded-lg">
-                  <div class="flex items-center gap-2 text-white">
-                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <span>Reading...</span>
-                  </div>
+          <div class="flex items-center gap-6">
+            <div class="h-px flex-1 bg-white/5"></div>
+            <span class="text-[10px] uppercase tracking-widest text-gray-700 font-black">or</span>
+            <div class="h-px flex-1 bg-white/5"></div>
+          </div>
+
+          <div>
+            <div class="flex justify-between items-center mb-8">
+              <span class="text-[10px] uppercase tracking-[0.4em] text-gray-500 font-black">Visual Context</span>
+              <button type="button" (click)="openCamera()" class="text-[10px] uppercase tracking-widest font-black text-orange-500 hover:text-orange-400 transition-colors disabled:opacity-50 flex items-center gap-2" [disabled]="isLoading() || isExtractingText()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Camera
+              </button>
+            </div>
+            
+            <div class="relative group">
+              <label for="file-upload" class="flex flex-col items-center justify-center w-full h-56 rounded-[2rem] border-2 border-dashed border-white/5 hover:border-orange-500/30 transition-all cursor-pointer bg-white/[0.02] hover:bg-white/[0.05]">
+                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                  <svg class="w-12 h-12 mb-4 text-gray-600 group-hover:text-orange-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 00-2 2z"></path>
+                  </svg>
+                  <p class="text-sm text-gray-500 font-light">Drop screenshot or <span class="text-orange-500 font-medium">browse</span></p>
                 </div>
-              }
+                <input id="file-upload" name="file-upload" type="file" class="sr-only" (change)="onFileChange($event)" accept="image/*">
+              </label>
             </div>
           </div>
-        }
 
-        <div class="flex items-center justify-between mt-4">
-            <button
-                type="button"
-                (click)="clearInput()"
-                class="rounded-md bg-gray-700 px-4 py-2 text-sm font-semibold text-gray-300 shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500 transition-colors"
-                [disabled]="isLoading() || isExtractingText()"
-            >
-                Clear
-            </button>
-            <button
-                type="button"
-                (click)="getHelp()"
-                class="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                [disabled]="isLoading() || isExtractingText()"
-            >
-                @if (isLoading()) {
-                    <div class="flex items-center gap-2">
-                        <svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Thinking...
+          @if (uploadedImage().previewUrl) {
+            <div class="mt-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div class="relative rounded-2xl overflow-hidden border border-white/10">
+                <img [src]="uploadedImage().previewUrl" alt="Screenshot preview" class="w-full max-w-md mx-auto" [class.blur-sm]="isExtractingText()">
+                @if (isExtractingText()) {
+                  <div class="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                    <div class="flex items-center gap-3 text-white">
+                      <div class="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                      <span class="text-sm font-medium tracking-widest uppercase">Analyzing</span>
                     </div>
-                } @else {
-                    <span>Get Advice</span>
-                }
-            </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Error Display -->
-    @if (error()) {
-      <div class="mt-6 bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded-lg relative" role="alert">
-        <strong class="font-bold">Oops! </strong>
-        <span class="block sm:inline">{{ error() }}</span>
-      </div>
-    }
-
-    <!-- Response Section -->
-    @if (responses() && !isLoading()) {
-      <div class="mt-8">
-        <h2 class="text-2xl font-semibold text-center mb-6 text-gray-200">Here's your game plan, bro:</h2>
-        <div class="space-y-4">
-          @for (option of responses()!.options; track option.title; let i = $index) {
-            <div class="bg-gray-800 rounded-lg p-5 border border-gray-700 shadow-lg transform hover:scale-105 hover:border-teal-500 transition-all duration-300">
-              <div class="flex justify-between items-start">
-                  <div>
-                      <h3 class="text-lg font-semibold text-teal-400">{{ option.title }}</h3>
-                      <p class="mt-2 text-gray-300 whitespace-pre-wrap">{{ option.reply }}</p>
                   </div>
-                  <button (click)="copyToClipboard(option.reply, i)"
-                          class="ml-4 flex-shrink-0 relative rounded-full bg-gray-700 p-2 text-gray-400 hover:text-white hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors"
-                          [title]="copiedState()[i] ? 'Copied!' : 'Copy reply'">
-                      @if (copiedState()[i]) {
-                          <!-- Checkmark Icon -->
-                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-                              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                          </svg>
-                      } @else {
-                          <!-- Copy Icon -->
-                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                          </svg>
-                      }
-                  </button>
+                }
               </div>
             </div>
           }
+
+          <div class="flex items-center justify-between pt-8">
+            <button
+              type="button"
+              (click)="clearInput()"
+              class="text-[10px] uppercase tracking-widest font-bold text-gray-500 hover:text-white transition-colors disabled:opacity-50"
+              [disabled]="isLoading() || isExtractingText()"
+            >
+              Reset
+            </button>
+            <button
+              type="button"
+              (click)="getHelp()"
+              class="px-12 py-5 rounded-full bg-gradient-to-r from-orange-600 to-red-600 text-white text-xs font-black uppercase tracking-[0.3em] shadow-[0_0_40px_rgba(234,88,12,0.4)] hover:shadow-[0_0_60px_rgba(234,88,12,0.6)] hover:scale-105 transition-all active:scale-95 disabled:opacity-50 disabled:grayscale relative overflow-hidden group/btn"
+              [disabled]="isLoading() || isExtractingText()"
+            >
+              <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-1000"></div>
+              @if (isLoading()) {
+                <div class="flex items-center gap-4">
+                  <div class="flex gap-1">
+                    <div class="w-1.5 h-1.5 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                    <div class="w-1.5 h-1.5 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                    <div class="w-1.5 h-1.5 bg-white rounded-full animate-bounce"></div>
+                  </div>
+                  <span>Thinking</span>
+                </div>
+              } @else {
+                <span class="relative z-10">Get Advice</span>
+              }
+            </button>
+          </div>
         </div>
       </div>
-    }
+
+      <!-- Error Display -->
+      @if (error()) {
+        <div class="mt-8 glass-surface border-red-500/20 text-red-400 px-6 py-4 rounded-2xl animate-in fade-in slide-in-from-top-4 duration-300">
+          <div class="flex items-center gap-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-sm font-light">{{ error() }}</span>
+          </div>
+        </div>
+      }
+
+      <!-- Response Section -->
+      @if (responses() && !isLoading()) {
+        <div class="mt-16 w-full animate-in fade-in slide-in-from-bottom-12 duration-1000">
+          <div class="flex items-center gap-4 mb-12">
+            <div class="h-px flex-1 bg-white/10"></div>
+            <h2 class="text-[10px] uppercase tracking-[0.5em] text-center text-orange-500 font-black">The Game Plan</h2>
+            <div class="h-px flex-1 bg-white/10"></div>
+          </div>
+          
+          <div class="grid grid-cols-1 gap-8">
+            @for (option of responses()!.options; track option.title; let i = $index) {
+              <div class="glass-surface rounded-[2.5rem] p-10 group hover:bg-white/[0.06] transition-all duration-700 hover:-translate-y-1">
+                <div class="flex justify-between items-start">
+                  <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-6">
+                      <span class="w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(234,88,12,0.8)]"></span>
+                      <h3 class="text-[10px] uppercase tracking-[0.4em] text-gray-400 font-black">{{ option.title }}</h3>
+                    </div>
+                    <p class="text-2xl font-light text-gray-100 leading-relaxed tracking-tight selection:bg-orange-500/30">"{{ option.reply }}"</p>
+                  </div>
+                  <button (click)="copyToClipboard(option.reply, i)"
+                          class="ml-8 p-5 rounded-full glass-surface hover:bg-orange-600 transition-all group/btn shadow-xl active:scale-90 relative overflow-hidden"
+                          [title]="copiedState()[i] ? 'Copied!' : 'Copy'">
+                    <div class="absolute inset-0 bg-white/10 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>
+                    @if (copiedState()[i]) {
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                      </svg>
+                    } @else {
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 group-hover/btn:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                    }
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
     }
   </div>
 
   <!-- Camera Modal -->
   @if (isCameraOpen()) {
-    <div class="fixed inset-0 bg-gray-900 bg-opacity-80 flex flex-col items-center justify-center z-50 p-4 backdrop-blur-sm">
-      <div class="relative bg-gray-800 rounded-2xl w-full max-w-lg shadow-2xl border border-gray-700">
-        <video #videoElement class="rounded-t-lg w-full h-auto" autoplay playsinline muted></video>
-        <div class="p-4 flex justify-center items-center gap-4 bg-gray-800/50 rounded-b-lg border-t border-gray-700 relative h-28">
-          <button (click)="captureImage()" class="w-16 h-16 rounded-full bg-teal-600 border-4 border-teal-400 text-sm font-semibold text-white shadow-lg hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-teal-500 transition-all transform hover:scale-110" aria-label="Capture image">
-            <svg class="w-8 h-8 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.776 48.776 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
-              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
-            </svg>
+    <div class="fixed inset-0 bg-black/90 flex flex-col items-center justify-center z-50 p-4 backdrop-blur-xl">
+      <div class="relative glass-surface rounded-[2.5rem] w-full max-w-lg overflow-hidden shadow-2xl">
+        <video #videoElement class="w-full h-auto" autoplay playsinline muted></video>
+        <div class="p-8 flex justify-center items-center gap-8">
+          <button (click)="captureImage()" class="w-20 h-20 rounded-full bg-orange-600 border-4 border-white/20 shadow-[0_0_40px_rgba(234,88,12,0.4)] hover:bg-orange-500 transition-all transform hover:scale-110 active:scale-90" aria-label="Capture">
+            <div class="w-6 h-6 bg-white rounded-full mx-auto"></div>
           </button>
-          <button (click)="closeCamera()" class="absolute top-3 right-3 rounded-full bg-gray-900/50 p-2 text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-white" aria-label="Close camera">
-            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          <button (click)="closeCamera()" class="absolute top-6 right-6 p-3 rounded-full glass-surface text-gray-400 hover:text-white transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
       </div>
-      <p class="text-gray-400 mt-4 text-sm">Point your camera at the chat screen and capture.</p>
+      <p class="text-gray-500 mt-8 text-xs uppercase tracking-[0.3em] font-bold">Capture the Chat</p>
     </div>
   }
 

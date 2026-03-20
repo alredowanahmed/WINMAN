@@ -31,9 +31,30 @@ export class AppComponent implements OnInit {
 
   showHistory = signal(false);
   historyItems = signal<HistoryItem[]>([]);
+  hasApiKey = signal<boolean>(true);
 
-  ngOnInit() {
+  async ngOnInit() {
     this.loadHistory();
+    this.checkApiKey();
+  }
+
+  async checkApiKey() {
+    const win = window as any;
+    if (win.aistudio && typeof win.aistudio.hasSelectedApiKey === 'function') {
+      const hasKey = await win.aistudio.hasSelectedApiKey();
+      this.hasApiKey.set(hasKey);
+    }
+  }
+
+  async openKeySelector() {
+    const win = window as any;
+    if (win.aistudio && typeof win.aistudio.openSelectKey === 'function') {
+      await win.aistudio.openSelectKey();
+      // After selection, we assume success and refresh the state
+      this.hasApiKey.set(true);
+      // Re-initialize Gemini service if needed (it will pick up the new key from process.env)
+      this.geminiService.reinitialize();
+    }
   }
 
   async loadHistory() {
