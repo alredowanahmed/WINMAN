@@ -5,8 +5,8 @@ export interface HistoryItem {
   id?: number;
   timestamp: number;
   userInput: string;
-  imagePreviewUrl: string | null;
   responses: ApiResponse;
+  imagePreviewUrl?: string;
 }
 
 @Injectable({

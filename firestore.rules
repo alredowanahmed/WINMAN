@@ -1,0 +1,80 @@
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Collection: ads
+// Document ID: auto-generated
+// Fields:
+//   - title: string (required) - The title of the ad
+//   - description: string (required) - The description of the ad
+//   - link: string (required) - The URL the ad points to
+//   - adScript: string (optional) - Google AdSense or other ad script code
+//   - active: boolean (required) - Whether the ad is currently active
+//   - createdAt: timestamp (optional) - When the ad was created
+//
+// Collection: user_stats
+// Document ID: userId
+// Fields:
+//   - uid: string (required) - The unique ID of the user
+//   - lastUsed: timestamp (optional) - The last time the user used the app
+//   - usageCount: number (required) - How many times the user has used the app
+//
+// ===============================================================
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && 
+        (
+          (request.auth.token.get('email', '').lower() == "fahimdj071@gmail.com" && request.auth.token.get('email_verified', false) == true) ||
+          (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin')
+        );
+    }
+
+    function isValidAd(data) {
+      return data.keys().hasAll(['title', 'description', 'link', 'active']) &&
+             data.title is string && data.title.size() > 0 && data.title.size() < 100 &&
+             data.description is string && data.description.size() > 0 && data.description.size() < 500 &&
+             data.link is string && data.link.matches("^https?://.*") &&
+             (!('adScript' in data) || (data.adScript is string && data.adScript.size() < 5000)) &&
+             data.active is bool;
+    }
+
+    function isValidUserStat(data) {
+      return data.keys().hasAll(['uid', 'usageCount']) &&
+             data.uid is string &&
+             data.usageCount is number && data.usageCount >= 0;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /ads/{adId} {
+      allow read: if true; // Anyone can read ads
+      allow create, update, delete: if isAdmin() && isValidAd(request.resource.data);
+    }
+
+    match /user_stats/{userId} {
+      allow get: if isOwner(userId) || isAdmin();
+      allow list: if isAdmin();
+      allow create: if (isOwner(userId) && isValidUserStat(request.resource.data) && request.resource.data.uid == request.auth.uid) || isAdmin();
+      allow update: if (isOwner(userId) && isValidUserStat(request.resource.data) && request.resource.data.uid == resource.data.uid) || isAdmin();
+      allow delete: if isAdmin();
+    }
+  }
+}
