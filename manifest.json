@@ -1,11 +1,11 @@
 {
-  "name": "Desi Wingman",
+  "name": "Wingman Bro",
   "short_name": "Wingman",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#050201",
   "theme_color": "#ff4e00",
-  "description": "Your AI dating coach and task manager for the modern BD scene.",
+  "description": "Your AI dating coach and roadmap manager for the global dating scene.",
   "icons": [
     {
       "src": "favicon.ico",
