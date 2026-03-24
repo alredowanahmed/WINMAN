@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node set-env.js && ng serve",
     "build": "node set-env.js && ng build",
-    "preview": "node set-env.js && ng serve --configuration=production"
+    "preview": "node set-env.js && ng serve --configuration=production",
+    "lint": "ng lint"
   },
   "dependencies": {
     "@angular/build": "^21.2.0",

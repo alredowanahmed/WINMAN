@@ -4,29 +4,39 @@
   <div class="w-full max-w-2xl mx-auto z-10">
     
     <!-- Header -->
-    <header class="text-center mb-16 relative">
+    <header class="text-center mb-16 relative pt-12">
+      <div class="inline-block px-4 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-[10px] uppercase tracking-[0.3em] font-black mb-6 animate-in fade-in zoom-in duration-1000">
+        #1 AI Dating Coach in Bangladesh
+      </div>
       <h1 class="text-7xl sm:text-8xl font-bold tracking-tighter text-white mb-4 text-glow animate-in fade-in slide-in-from-top-8 duration-1000">
-        Desi <span class="text-orange-500 italic">Wingman</span>
+        Wingman <span class="text-orange-500 italic">Bro</span>
       </h1>
-      <p class="text-gray-400 text-xl font-light tracking-wide animate-in fade-in slide-in-from-top-4 duration-1000 delay-200">
-        Your AI dating coach for the modern BD scene.
+      <p class="text-gray-400 text-xl font-light tracking-wide max-w-lg mx-auto animate-in fade-in slide-in-from-top-4 duration-1000 delay-200">
+        Stop getting ghosted. Get witty, charming, and culturally-tuned replies for Tinder, Bumble, and Instagram.
       </p>
       
       <div class="flex justify-center gap-4 mt-8 animate-in fade-in slide-in-from-top-2 duration-1000 delay-500">
-        <button (click)="toggleHistory()" class="inline-flex items-center gap-2 glass-surface px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white transition-all hover:scale-105 active:scale-95">
+        <button (click)="toggleTasks()" class="inline-flex items-center gap-2 glass-surface px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 hover:shadow-[0_0_20px_rgba(234,88,12,0.3)] border border-white/10 hover:border-orange-500/50" [class.text-orange-500]="showTasks()" [class.text-gray-300]="!showTasks()" [class.hover:text-white]="!showTasks()">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+          </svg>
+          {{ showTasks() ? 'Back to App' : 'Dating Roadmap' }}
+        </button>
+
+        <button (click)="toggleHistory()" class="inline-flex items-center gap-2 glass-surface px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-gray-300 hover:text-white transition-all hover:scale-105 active:scale-95 hover:shadow-[0_0_20px_rgba(234,88,12,0.3)] border border-white/10 hover:border-orange-500/50" [class.text-orange-500]="showHistory()">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           {{ showHistory() ? 'Back to App' : 'History' }}
         </button>
         
-        <button (click)="openKeySelector()" class="inline-flex items-center gap-2 glass-surface px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all hover:scale-105 active:scale-95" [class.text-orange-500]="!hasApiKey()" [class.text-gray-300]="hasApiKey()" [class.hover:text-white]="hasApiKey()">
+        <button (click)="openKeySelector()" class="inline-flex items-center gap-2 glass-surface px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 hover:shadow-[0_0_20px_rgba(234,88,12,0.3)] border border-white/10 hover:border-orange-500/50" [class.text-orange-500]="!hasApiKey()" [class.text-gray-300]="hasApiKey()" [class.hover:text-white]="hasApiKey()">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
           </svg>
           {{ hasApiKey() ? 'API Key Set' : 'Set API Key' }}
         </button>
-        <button (click)="toggleSettings()" class="inline-flex items-center gap-2 glass-surface px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white transition-all hover:scale-105 active:scale-95">
+        <button (click)="toggleSettings()" class="inline-flex items-center gap-2 glass-surface px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-gray-300 hover:text-white transition-all hover:scale-105 active:scale-95 hover:shadow-[0_0_20px_rgba(234,88,12,0.3)] border border-white/10 hover:border-orange-500/50">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -70,7 +80,7 @@
 
             <button
               (click)="saveManualKey()"
-              class="w-full py-5 rounded-2xl bg-orange-600 text-white text-xs font-black uppercase tracking-[0.3em] shadow-xl hover:bg-orange-500 transition-all active:scale-95"
+              class="w-full py-5 rounded-2xl bg-orange-600 text-white text-[10px] font-black uppercase tracking-[0.3em] shadow-[0_4px_0_rgb(154,52,18)] hover:shadow-[0_2px_0_rgb(154,52,18)] hover:translate-y-[2px] active:shadow-none active:translate-y-[4px] transition-all"
             >
               Save Configuration
             </button>
@@ -79,16 +89,95 @@
       </div>
     }
 
-    @if (showHistory()) {
+    @if (showTasks()) {
+      <!-- Dating Roadmap Section -->
+      <div class="glass-surface rounded-[2.5rem] p-10 shadow-2xl animate-in fade-in zoom-in-95 duration-700">
+        <div class="flex justify-between items-center mb-10">
+          <h2 class="text-3xl font-light text-white tracking-tight">Dating <span class="text-orange-500 italic">Roadmap</span></h2>
+          <span class="text-[10px] uppercase tracking-[0.4em] text-gray-500 font-black">{{ tasks().length }} Goals</span>
+        </div>
+
+        <!-- Add Goal Form -->
+        <div class="space-y-6 mb-12">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="text-[10px] uppercase tracking-[0.4em] text-gray-500 font-black block mb-3">Goal Title</label>
+              <input
+                type="text"
+                [ngModel]="newTaskTitle()"
+                (ngModelChange)="newTaskTitle.set($event)"
+                placeholder="e.g., Ask her out for coffee"
+                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-white/20 focus:outline-none focus:border-orange-500/50 transition-all"
+                (keyup.enter)="addTask()"
+              />
+            </div>
+            <div>
+              <label class="text-[10px] uppercase tracking-[0.4em] text-gray-500 font-black block mb-3">Target Date</label>
+              <input
+                type="date"
+                [ngModel]="newTaskDueDate()"
+                (ngModelChange)="newTaskDueDate.set($event)"
+                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-orange-500/50 transition-all [color-scheme:dark]"
+              />
+            </div>
+          </div>
+          <button
+            (click)="addTask()"
+            class="w-full py-5 rounded-2xl bg-orange-600 text-white text-[10px] font-black uppercase tracking-[0.3em] shadow-[0_4px_0_rgb(154,52,18)] hover:shadow-[0_2px_0_rgb(154,52,18)] hover:translate-y-[2px] active:shadow-none active:translate-y-[4px] transition-all flex items-center justify-center gap-3"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Add Goal
+          </button>
+        </div>
+
+        <!-- Goals List -->
+        <div class="space-y-4">
+          @if (tasks().length === 0) {
+            <div class="text-center py-12 text-gray-600">
+              <p class="text-lg font-light italic">No goals yet. Set your first dating milestone!</p>
+            </div>
+          } @else {
+            @for (task of tasks(); track task.id) {
+              <div class="glass-surface rounded-2xl p-6 flex items-center justify-between group hover:bg-white/[0.05] transition-all duration-300" [class.opacity-60]="task.completed">
+                <div class="flex items-center gap-6 flex-1">
+                  <button (click)="toggleTask(task.id)" class="w-8 h-8 rounded-full border-2 transition-all flex items-center justify-center" [class.bg-orange-600]="task.completed" [class.border-orange-600]="task.completed" [class.border-white/20]="!task.completed">
+                    @if (task.completed) {
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                      </svg>
+                    }
+                  </button>
+                  <div class="flex-1 min-w-0">
+                    <h3 class="text-xl font-light text-white truncate" [class.line-through]="task.completed">{{ task.title }}</h3>
+                    @if (task.dueDate) {
+                      <p class="text-[10px] uppercase tracking-widest text-gray-500 mt-1">Target: {{ task.dueDate | date:'mediumDate' }}</p>
+                    }
+                  </div>
+                </div>
+                <button (click)="deleteTask(task.id)" class="p-3 text-gray-600 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+            }
+          }
+        </div>
+      </div>
+    } @else if (showHistory()) {
       <!-- History Section -->
       <div class="glass-surface rounded-3xl p-8 shadow-2xl">
         <div class="flex justify-between items-center mb-8">
           <h2 class="text-3xl font-light text-white">History</h2>
-          @if (historyItems().length > 0) {
-            <button (click)="clearHistory()" class="text-sm text-red-400/70 hover:text-red-400 transition-colors uppercase tracking-widest font-semibold">
-              Clear All
-            </button>
-          }
+          <div class="flex gap-4">
+            @if (historyItems().length > 0) {
+              <button (click)="clearHistory()" class="px-6 py-2 rounded-xl glass-surface text-[10px] text-red-400/70 hover:text-red-400 transition-all uppercase tracking-[0.2em] font-black border border-red-500/10 hover:border-red-500/30 hover:shadow-[0_0_20px_rgba(239,68,68,0.2)] active:scale-95">
+                Clear All
+              </button>
+            }
+          </div>
         </div>
         
         @if (historyItems().length === 0) {
@@ -98,7 +187,12 @@
         } @else {
           <div class="space-y-8">
             @for (item of historyItems(); track item.id) {
-              <div class="border-b border-white/5 pb-8 last:border-0">
+              <div class="border-b border-white/5 pb-8 last:border-0 relative group/item">
+                <button (click)="deleteHistoryItem(item.id!)" class="absolute top-0 right-0 p-3 text-gray-600 hover:text-red-500 transition-all opacity-0 group-hover/item:opacity-100 hover:scale-110 active:scale-90" title="Delete this item">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
                 <div class="text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-4">{{ item.timestamp | date:'medium' }}</div>
                 
                 <div class="mb-6 flex gap-6 items-start">
@@ -122,14 +216,14 @@
                           <p class="mt-1 text-sm text-gray-300 leading-relaxed">{{ option.reply }}</p>
                         </div>
                         <button (click)="copyToClipboard(option.reply, item.id! * 100 + i)"
-                                class="ml-4 p-2 rounded-full hover:bg-white/10 transition-all"
+                                class="ml-4 p-3 rounded-2xl glass-surface border border-white/5 hover:border-orange-500/30 transition-all hover:shadow-[0_0_15px_rgba(234,88,12,0.2)] active:scale-90"
                                 [title]="copiedState()[item.id! * 100 + i] ? 'Copied!' : 'Copy'">
                           @if (copiedState()[item.id! * 100 + i]) {
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
                               <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                             </svg>
                           } @else {
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                             </svg>
                           }
@@ -222,7 +316,7 @@
             <button
               type="button"
               (click)="getHelp()"
-              class="px-12 py-5 rounded-full bg-gradient-to-r from-orange-600 to-red-600 text-white text-xs font-black uppercase tracking-[0.3em] shadow-[0_0_40px_rgba(234,88,12,0.4)] hover:shadow-[0_0_60px_rgba(234,88,12,0.6)] hover:scale-105 transition-all active:scale-95 disabled:opacity-50 disabled:grayscale relative overflow-hidden group/btn"
+              class="px-12 py-5 rounded-full bg-gradient-to-r from-orange-600 to-red-600 text-white text-[10px] font-black uppercase tracking-[0.3em] shadow-[0_6px_0_rgb(154,52,18),0_0_40px_rgba(234,88,12,0.4)] hover:shadow-[0_3px_0_rgb(154,52,18),0_0_60px_rgba(234,88,12,0.6)] hover:translate-y-[3px] active:shadow-none active:translate-y-[6px] transition-all disabled:opacity-50 disabled:grayscale relative overflow-hidden group/btn"
               [disabled]="isLoading() || isExtractingText()"
             >
               <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-1000"></div>
@@ -296,6 +390,115 @@
         </div>
       }
     }
+
+    <!-- Trust & Info Sections (Only show on main app view) -->
+    @if (!showTasks() && !showHistory() && !showSettings() && !responses()) {
+      <div class="mt-24 space-y-32 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-700">
+        
+        <!-- How it Works -->
+        <section id="how-it-works">
+          <h2 class="text-[10px] uppercase tracking-[0.5em] text-center text-orange-500 font-black mb-12">How it Works</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="glass-surface p-8 rounded-3xl text-center">
+              <div class="w-12 h-12 bg-orange-500/20 rounded-2xl flex items-center justify-center text-orange-500 mx-auto mb-6">1</div>
+              <h3 class="text-white font-medium mb-3">Upload Screenshot</h3>
+              <p class="text-gray-500 text-sm leading-relaxed">Take a snap of the chat or type out what she said. Our AI reads the vibe.</p>
+            </div>
+            <div class="glass-surface p-8 rounded-3xl text-center">
+              <div class="w-12 h-12 bg-orange-500/20 rounded-2xl flex items-center justify-center text-orange-500 mx-auto mb-6">2</div>
+              <h3 class="text-white font-medium mb-3">AI Analysis</h3>
+              <p class="text-gray-500 text-sm leading-relaxed">We analyze Banglish, Bengali, and English context to find the perfect response.</p>
+            </div>
+            <div class="glass-surface p-8 rounded-3xl text-center">
+              <div class="w-12 h-12 bg-orange-500/20 rounded-2xl flex items-center justify-center text-orange-500 mx-auto mb-6">3</div>
+              <h3 class="text-white font-medium mb-3">Pick Your Rizz</h3>
+              <p class="text-gray-500 text-sm leading-relaxed">Choose from 3 distinct styles: Playful, Sweet, or Mystery. Copy and send!</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section id="testimonials">
+          <h2 class="text-[10px] uppercase tracking-[0.5em] text-center text-orange-500 font-black mb-12">Success Stories</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="glass-surface p-8 rounded-3xl italic font-light text-gray-300 relative">
+              <span class="absolute -top-4 -left-2 text-6xl text-orange-500/20">"</span>
+              "I was struggling with what to say after 'Hi'. Desi Wingman gave me a witty Banglish reply that actually got a laugh. We're meeting for coffee next week!"
+              <div class="mt-6 flex items-center gap-3 not-italic">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-red-500"></div>
+                <span class="text-xs font-bold text-white uppercase tracking-widest">Abrar, 24</span>
+              </div>
+            </div>
+            <div class="glass-surface p-8 rounded-3xl italic font-light text-gray-300 relative">
+              <span class="absolute -top-4 -left-2 text-6xl text-orange-500/20">"</span>
+              "The 'Mystery' option is a game changer. It helped me play it cool when I usually overthink. Highly recommended for anyone in the Dhaka dating scene."
+              <div class="mt-6 flex items-center gap-3 not-italic">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-teal-500 to-blue-500"></div>
+                <span class="text-xs font-bold text-white uppercase tracking-widest">Samiul, 27</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq" class="max-w-xl mx-auto">
+          <h2 class="text-[10px] uppercase tracking-[0.5em] text-center text-orange-500 font-black mb-12">FAQ</h2>
+          <div class="space-y-6">
+            <details class="glass-surface rounded-2xl group">
+              <summary class="p-6 cursor-pointer list-none flex justify-between items-center text-white font-medium">
+                Is it free to use?
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <div class="px-6 pb-6 text-gray-500 text-sm leading-relaxed">
+                Yes! You can use your own Gemini API key for free. We don't charge for the advice, we just provide the AI power.
+              </div>
+            </details>
+            <details class="glass-surface rounded-2xl group">
+              <summary class="p-6 cursor-pointer list-none flex justify-between items-center text-white font-medium">
+                Does it understand Banglish?
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <div class="px-6 pb-6 text-gray-500 text-sm leading-relaxed">
+                Absolutely. Our AI is specifically tuned for the Bangladeshi context, understanding local slang, humor, and cultural nuances.
+              </div>
+            </details>
+            <details class="glass-surface rounded-2xl group">
+              <summary class="p-6 cursor-pointer list-none flex justify-between items-center text-white font-medium">
+                Is my data private?
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <div class="px-6 pb-6 text-gray-500 text-sm leading-relaxed">
+                Your chat history is stored locally on your device (IndexedDB). We don't store your screenshots or messages on our servers.
+              </div>
+            </details>
+          </div>
+        </section>
+
+      </div>
+    }
+
+    <!-- Footer -->
+    <footer class="mt-32 pb-16 border-t border-white/5 pt-16 text-center">
+      <div class="flex flex-col items-center gap-8">
+        <div class="text-2xl font-bold tracking-tighter text-white">
+          Wingman <span class="text-orange-500 italic">Bro</span>
+        </div>
+        <nav class="flex gap-8 text-[10px] uppercase tracking-[0.3em] font-bold text-gray-500">
+          <a href="#" class="hover:text-white transition-colors">Privacy</a>
+          <a href="#" class="hover:text-white transition-colors">Terms</a>
+          <a href="mailto:support@wingman.bro.bd" class="hover:text-white transition-colors">Contact</a>
+        </nav>
+        <p class="text-gray-700 text-[10px] uppercase tracking-widest font-bold">
+          &copy; 2026 Wingman Bro. Built for the Bro BD community.
+        </p>
+      </div>
+    </footer>
   </div>
 
   <!-- Camera Modal -->
@@ -304,10 +507,10 @@
       <div class="relative glass-surface rounded-[2.5rem] w-full max-w-lg overflow-hidden shadow-2xl">
         <video #videoElement class="w-full h-auto" autoplay playsinline muted></video>
         <div class="p-8 flex justify-center items-center gap-8">
-          <button (click)="captureImage()" class="w-20 h-20 rounded-full bg-orange-600 border-4 border-white/20 shadow-[0_0_40px_rgba(234,88,12,0.4)] hover:bg-orange-500 transition-all transform hover:scale-110 active:scale-90" aria-label="Capture">
-            <div class="w-6 h-6 bg-white rounded-full mx-auto"></div>
+          <button (click)="captureImage()" class="w-20 h-20 rounded-full bg-orange-600 border-4 border-white/20 shadow-[0_6px_0_rgb(154,52,18),0_0_40px_rgba(234,88,12,0.4)] hover:shadow-[0_3px_0_rgb(154,52,18),0_0_60px_rgba(234,88,12,0.6)] hover:translate-y-[3px] active:shadow-none active:translate-y-[6px] transition-all flex items-center justify-center" aria-label="Capture">
+            <div class="w-6 h-6 bg-white rounded-full"></div>
           </button>
-          <button (click)="closeCamera()" class="absolute top-6 right-6 p-3 rounded-full glass-surface text-gray-400 hover:text-white transition-colors">
+          <button (click)="closeCamera()" class="absolute top-6 right-6 p-4 rounded-2xl glass-surface text-gray-400 hover:text-white transition-all border border-white/5 hover:border-white/20 hover:scale-110 active:scale-90">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>

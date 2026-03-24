@@ -1,9 +1,16 @@
 
-import { Component, ChangeDetectionStrategy, signal, inject, ElementRef, viewChild, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, inject, ElementRef, viewChild, OnInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GeminiService, ApiResponse } from './services/gemini.service';
 import { HistoryService, HistoryItem } from './services/history.service';
+
+interface Task {
+  id: number;
+  title: string;
+  dueDate: string;
+  completed: boolean;
+}
 
 @Component({
   selector: 'app-root',
@@ -31,14 +38,71 @@ export class AppComponent implements OnInit {
 
   showHistory = signal(false);
   showSettings = signal(false);
+  showTasks = signal(false);
   historyItems = signal<HistoryItem[]>([]);
   hasApiKey = signal<boolean>(true);
   manualApiKey = signal<string>('');
+
+  // Task Management
+  tasks = signal<Task[]>([]);
+  newTaskTitle = signal('');
+  newTaskDueDate = signal('');
+
+  constructor() {
+    effect(() => {
+      localStorage.setItem('TASKS_DATA', JSON.stringify(this.tasks()));
+    });
+  }
 
   async ngOnInit() {
     this.loadHistory();
     this.checkApiKey();
     this.loadManualKey();
+    this.loadTasks();
+  }
+
+  loadTasks() {
+    const savedTasks = localStorage.getItem('TASKS_DATA');
+    if (savedTasks) {
+      try {
+        this.tasks.set(JSON.parse(savedTasks));
+      } catch (e) {
+        console.error('Failed to parse tasks', e);
+      }
+    }
+  }
+
+  addTask() {
+    if (!this.newTaskTitle().trim()) return;
+    
+    const newTask: Task = {
+      id: Date.now(),
+      title: this.newTaskTitle().trim(),
+      dueDate: this.newTaskDueDate(),
+      completed: false
+    };
+
+    this.tasks.update(tasks => [newTask, ...tasks]);
+    this.newTaskTitle.set('');
+    this.newTaskDueDate.set('');
+  }
+
+  toggleTask(id: number) {
+    this.tasks.update(tasks => tasks.map(t => 
+      t.id === id ? { ...t, completed: !t.completed } : t
+    ));
+  }
+
+  deleteTask(id: number) {
+    this.tasks.update(tasks => tasks.filter(t => t.id !== id));
+  }
+
+  toggleTasks() {
+    this.showTasks.set(!this.showTasks());
+    if (this.showTasks()) {
+      this.showHistory.set(false);
+      this.showSettings.set(false);
+    }
   }
 
   loadManualKey() {
@@ -64,6 +128,10 @@ export class AppComponent implements OnInit {
 
   toggleSettings() {
     this.showSettings.update(v => !v);
+    if (this.showSettings()) {
+      this.showHistory.set(false);
+      this.showTasks.set(false);
+    }
   }
 
   saveManualKey() {
@@ -105,6 +173,8 @@ export class AppComponent implements OnInit {
     this.showHistory.set(!this.showHistory());
     if (this.showHistory()) {
       this.loadHistory();
+      this.showTasks.set(false);
+      this.showSettings.set(false);
     }
   }
 
@@ -112,6 +182,15 @@ export class AppComponent implements OnInit {
     if (confirm('Are you sure you want to clear all history?')) {
       await this.historyService.clearHistory();
       this.historyItems.set([]);
+    }
+  }
+  
+  async deleteHistoryItem(id: number) {
+    try {
+      await this.historyService.deleteHistoryItem(id);
+      this.historyItems.update(items => items.filter(item => item.id !== id));
+    } catch (e) {
+      console.error('Failed to delete history item', e);
     }
   }
 

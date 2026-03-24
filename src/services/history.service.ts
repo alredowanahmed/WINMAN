@@ -63,6 +63,17 @@ export class HistoryService {
     });
   }
 
+  async deleteHistoryItem(id: number): Promise<void> {
+    const db = await this.initDB();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(this.storeName, 'readwrite');
+      const store = transaction.objectStore(this.storeName);
+      const request = store.delete(id);
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(request.error);
+    });
+  }
+
   async clearHistory(): Promise<void> {
     const db = await this.initDB();
     return new Promise((resolve, reject) => {
