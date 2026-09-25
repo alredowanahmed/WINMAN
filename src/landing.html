@@ -1,0 +1,501 @@
+<div class="min-h-screen flex flex-col bg-zinc-950 text-zinc-100 selection:bg-orange-500/30 selection:text-orange-200">
+
+  <!-- Mobile-First Responsive Navigation Bar -->
+  <header class="sticky top-0 z-50 w-full border-b border-zinc-800/80 bg-zinc-950/85 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand Logo Wordmark -->
+      <a routerLink="/" (click)="closeMobileMenu()" class="text-xl font-bold tracking-tight text-white flex items-center gap-1.5 font-display group cursor-pointer">
+        <span>Wingman</span>
+        <span class="text-orange-500 group-hover:text-orange-400 transition-colors">Bro</span>
+      </a>
+
+      <!-- Desktop Navigation Links (Clean 3-Zone Contract) -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
+        <button (click)="scrollToSection('how-it-works')" class="hover:text-white transition-colors cursor-pointer">
+          How to use
+        </button>
+        <button (click)="scrollToSection('features')" class="hover:text-white transition-colors cursor-pointer">
+          Features
+        </button>
+        <button (click)="scrollToSection('pricing')" class="hover:text-white transition-colors cursor-pointer">
+          Pricing & Terms
+        </button>
+        <button (click)="scrollToSection('faq')" class="hover:text-white transition-colors cursor-pointer">
+          FAQ
+        </button>
+        <button (click)="scrollToSection('directories')" class="hover:text-white transition-colors cursor-pointer">
+          Ecosystem
+        </button>
+      </nav>
+
+      <!-- Zone 3: Desktop Launch Action -->
+      <div class="hidden md:flex items-center gap-4">
+        <a 
+          routerLink="/tool"
+          class="px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl bg-orange-600 hover:bg-orange-500 text-white shadow-lg shadow-orange-600/25 transition-all cursor-pointer hover:scale-105 active:scale-95">
+          Launch Tool →
+        </a>
+      </div>
+
+      <!-- Mobile Controls (Quick Launch + Clean Hamburger) -->
+      <div class="flex items-center gap-2 md:hidden">
+        <a 
+          routerLink="/tool" 
+          class="px-3.5 py-1.5 text-xs font-bold rounded-lg bg-orange-600 text-white flex items-center gap-1 shadow-sm">
+          <span>Try Tool</span>
+        </a>
+
+        <button 
+          (click)="toggleMobileMenu()" 
+          class="p-2.5 text-zinc-400 hover:text-white rounded-lg border border-zinc-800 bg-zinc-900/60 active:bg-zinc-800 transition-colors"
+          aria-label="Toggle navigation menu"
+          [attr.aria-expanded]="mobileMenuOpen()">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            @if (mobileMenuOpen()) {
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            } @else {
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            }
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Drawer Menu (Mobile-first animated overlay) -->
+    @if (mobileMenuOpen()) {
+      <div class="md:hidden fixed inset-x-0 top-16 bg-zinc-950/95 backdrop-blur-xl border-b border-zinc-800 px-5 pt-4 pb-6 space-y-3.5 shadow-2xl animate-in slide-in-from-top-2 duration-200">
+        <button 
+          (click)="scrollToSection('how-it-works')" 
+          class="w-full text-left py-2.5 px-3 rounded-lg text-sm font-medium text-zinc-300 hover:bg-zinc-900 hover:text-white transition-colors">
+          How to use
+        </button>
+        <button 
+          (click)="scrollToSection('features')" 
+          class="w-full text-left py-2.5 px-3 rounded-lg text-sm font-medium text-zinc-300 hover:bg-zinc-900 hover:text-white transition-colors">
+          Features
+        </button>
+        <button 
+          (click)="scrollToSection('pricing')" 
+          class="w-full text-left py-2.5 px-3 rounded-lg text-sm font-medium text-zinc-300 hover:bg-zinc-900 hover:text-white transition-colors">
+          Pricing & Terms
+        </button>
+        <button 
+          (click)="scrollToSection('faq')" 
+          class="w-full text-left py-2.5 px-3 rounded-lg text-sm font-medium text-zinc-300 hover:bg-zinc-900 hover:text-white transition-colors">
+          FAQ
+        </button>
+        <button 
+          (click)="scrollToSection('directories')" 
+          class="w-full text-left py-2.5 px-3 rounded-lg text-sm font-medium text-zinc-300 hover:bg-zinc-900 hover:text-white transition-colors">
+          AI Directories & Backlinks
+        </button>
+
+        <div class="pt-3 border-t border-zinc-800/80">
+          <a 
+            routerLink="/tool" 
+            (click)="closeMobileMenu()" 
+            class="w-full py-3 rounded-xl bg-orange-600 hover:bg-orange-500 text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-orange-600/30">
+            <span>Launch Wingman Bro Tool</span>
+            <span>→</span>
+          </a>
+        </div>
+      </div>
+    }
+  </header>
+
+  <!-- Hero Section -->
+  <main class="flex-1">
+    <section class="relative pt-16 pb-24 md:pt-24 md:pb-32 overflow-hidden border-b border-zinc-900">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center">
+        
+        <div class="inline-block text-xs font-semibold text-orange-400 tracking-widest uppercase mb-4">
+          AI Wingman for Tinder & Dating Conversation Assistant
+        </div>
+
+        <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold text-white tracking-tight font-display leading-[1.1] mb-6">
+          Your AI Wingman for <br class="hidden sm:inline" />
+          <span class="text-orange-500">Better Conversations.</span>
+        </h1>
+
+        <p class="text-base sm:text-xl text-zinc-300 font-light max-w-2xl mx-auto mb-10 leading-relaxed">
+          Stop overthinking what to say on Tinder, Bumble, and DMs. Meet your personal dating conversation assistant that delivers witty, confident, and natural replies in seconds.
+        </p>
+
+        <!-- Primary Call to Action -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+          <a 
+            routerLink="/tool" 
+            class="w-full sm:w-auto px-10 py-4 rounded-2xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-sm uppercase tracking-wider shadow-xl shadow-orange-600/30 transition-all cursor-pointer hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
+            <span>Try Wingman Bro Free</span>
+            <span aria-hidden="true">→</span>
+          </a>
+          <button 
+            (click)="scrollToSection('how-it-works')" 
+            class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white font-medium text-sm border border-zinc-800 transition-colors cursor-pointer">
+            See how it works
+          </button>
+        </div>
+
+        <!-- Unboxed Platform Badges -->
+        <div class="flex items-center justify-center gap-2 text-xs text-zinc-500 font-medium">
+          <span>Tinder</span>
+          <span aria-hidden="true">·</span>
+          <span>Bumble</span>
+          <span aria-hidden="true">·</span>
+          <span>Hinge</span>
+          <span aria-hidden="true">·</span>
+          <span>Instagram DMs</span>
+          <span aria-hidden="true">·</span>
+          <span>WhatsApp</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- How to Use Section -->
+    <section id="how-it-works" class="py-24 border-b border-zinc-900 bg-zinc-950/60 scroll-mt-16">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        
+        <div class="text-center max-w-2xl mx-auto mb-16">
+          <span class="text-xs font-semibold text-orange-400 uppercase tracking-widest block mb-2">Step-by-Step Guide</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white font-display">
+            How to use Wingman Bro
+          </h2>
+          <p class="text-sm text-zinc-400 mt-3">
+            Three simple steps to transform dull or awkward chats into effortless banter.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          
+          <div class="p-8 rounded-2xl bg-zinc-900/50 border border-zinc-800/80">
+            <div class="text-3xl font-extrabold text-orange-500 font-display mb-4">Step 01</div>
+            <h3 class="text-lg font-bold text-white mb-2">Paste chat or upload screenshot</h3>
+            <p class="text-sm text-zinc-400 leading-relaxed">
+              Copy what she texted or upload a direct chat screenshot from Tinder, Bumble, Hinge, or Instagram. The vision model transcribes and reads the flow.
+            </p>
+          </div>
+
+          <div class="p-8 rounded-2xl bg-zinc-900/50 border border-zinc-800/80">
+            <div class="text-3xl font-extrabold text-orange-500 font-display mb-4">Step 02</div>
+            <h3 class="text-lg font-bold text-white mb-2">Choose your conversation vibe</h3>
+            <p class="text-sm text-zinc-400 leading-relaxed">
+              Pick the energy you want: <strong>Rizz</strong>, <strong>Playful</strong>, <strong>Funny</strong>, <strong>Flirty</strong>, <strong>Confident</strong>, <strong>Casual</strong>, <strong>Charming</strong>, or <strong>Direct</strong>.
+            </p>
+          </div>
+
+          <div class="p-8 rounded-2xl bg-zinc-900/50 border border-zinc-800/80">
+            <div class="text-3xl font-extrabold text-orange-500 font-display mb-4">Step 03</div>
+            <h3 class="text-lg font-bold text-white mb-2">Copy & Send in 1-Click</h3>
+            <p class="text-sm text-zinc-400 leading-relaxed">
+              You receive 3 distinct reply options. Pick the one you love, hit Copy, paste into your dating app, and continue chatting naturally.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="text-center mt-12">
+          <a 
+            routerLink="/tool" 
+            class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-semibold text-xs uppercase tracking-wider shadow-lg shadow-orange-600/20 transition-all">
+            <span>Try the Generator Now</span>
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Pricing & Terms Section -->
+    <section id="pricing" class="py-24 border-b border-zinc-900 scroll-mt-16">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        
+        <div class="text-center max-w-2xl mx-auto mb-16">
+          <span class="text-xs font-semibold text-orange-400 uppercase tracking-widest block mb-2">Pricing & Transparency</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white font-display">
+            Clear Pricing & Usage Terms
+          </h2>
+          <p class="text-sm text-zinc-400 mt-3">
+            No hidden fees, no required subscriptions, and 100% client-side privacy.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          
+          <!-- Free Tier -->
+          <div class="p-8 rounded-2xl bg-zinc-900/40 border border-zinc-800/90 flex flex-col justify-between">
+            <div>
+              <h3 class="text-lg font-bold text-white mb-1">Standard / BYOK Tier</h3>
+              <div class="text-3xl font-extrabold text-white font-display mb-4">$0 <span class="text-sm font-normal text-zinc-500">/ free forever</span></div>
+              <p class="text-xs text-zinc-400 mb-6 leading-relaxed">
+                Use Wingman Bro for free with your own Google AI Studio API key or standard community access.
+              </p>
+              <ul class="space-y-3 text-xs text-zinc-300 mb-8">
+                <li class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  Full access to AI Reply Generator
+                </li>
+                <li class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  Screenshot & chat photo OCR
+                </li>
+                <li class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  100% Client-Side Privacy (IndexedDB)
+                </li>
+                <li class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  Personal Dating Roadmap Planner
+                </li>
+              </ul>
+            </div>
+            <a 
+              routerLink="/tool" 
+              class="w-full py-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-semibold text-xs text-center transition-colors">
+              Launch Free Tool
+            </a>
+          </div>
+
+          <!-- Pro Option -->
+          <div class="p-8 rounded-2xl bg-zinc-900/80 border-2 border-orange-500/80 relative flex flex-col justify-between shadow-xl shadow-orange-950/20">
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <h3 class="text-lg font-bold text-white">Wingman Pro</h3>
+                <span class="text-[10px] font-bold text-orange-400 uppercase tracking-widest bg-orange-500/10 px-2 py-0.5 rounded">Optional</span>
+              </div>
+              <div class="text-3xl font-extrabold text-white font-display mb-4">$9 <span class="text-sm font-normal text-zinc-500">/ month</span></div>
+              <p class="text-xs text-zinc-400 mb-6 leading-relaxed">
+                For active daters wanting instant, zero-setup speed with unlimited high-volume generations and priority latency.
+              </p>
+              <ul class="space-y-3 text-xs text-zinc-300 mb-8">
+                <li class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  Zero-setup instant cloud processing
+                </li>
+                <li class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  Unlimited generations across all 7 vibes
+                </li>
+                <li class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  Fastest model latency during peak hours
+                </li>
+                <li class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  Cancel anytime with 1-click
+                </li>
+              </ul>
+            </div>
+            <a 
+              routerLink="/tool" 
+              class="w-full py-3 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-semibold text-xs text-center shadow-md shadow-orange-600/20 transition-all">
+              Start with Wingman Bro
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 border-b border-zinc-900 bg-zinc-950/60 scroll-mt-16">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        
+        <div class="text-center max-w-2xl mx-auto mb-16">
+          <span class="text-xs font-semibold text-orange-400 uppercase tracking-widest block mb-2">Capabilities</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white font-display">
+            Core Features & Intelligence
+          </h2>
+          <p class="text-sm text-zinc-400 mt-3">
+            Engineered specifically for dating banter, conversation momentum, and personal style.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800">
+            <h3 class="text-base font-bold text-white mb-2">AI Reply Generator</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed">
+              Generates 3 calibrated reply variations for every situation: playful teasing, sweet charm, or cool mystery.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800">
+            <h3 class="text-base font-bold text-white mb-2">Chat Screenshot OCR</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed">
+              Take a photo or upload a screenshot. The AI detects timestamps, message lengths, and her last text automatically.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800">
+            <h3 class="text-base font-bold text-white mb-2">8 Conversation Vibes</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed">
+              Calibrate to your preferred personality: Rizz, Playful, Funny, Flirty, Confident, Casual, Charming, or Direct.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800">
+            <h3 class="text-base font-bold text-white mb-2">Multilingual & Slang Support</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed">
+              Seamlessly recognizes English, Bengali, Banglish, Spanish, French, and local modern social slang.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800">
+            <h3 class="text-base font-bold text-white mb-2">Local Privacy Guarantee</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed">
+              Chats are stored only in your browser via IndexedDB. Nothing is retained or monitored on our servers.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800">
+            <h3 class="text-base font-bold text-white mb-2">Dating Roadmap Planner</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed">
+              Track personal dating milestones: updating profile photos, asking her out, or planning dates.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- AI Directories & Backlink Trust Area -->
+    <section id="directories" class="py-20 border-b border-zinc-900 scroll-mt-16">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center">
+        
+        <span class="text-xs font-semibold text-orange-400 uppercase tracking-widest block mb-2">Discovery & Ecosystem</span>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white font-display mb-4">
+          Indexed Across Leading AI Directories & Search Engines
+        </h2>
+        <p class="text-xs sm:text-sm text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+          Wingman Bro is verified and cataloged across the global AI software index, making it easily discoverable by search crawlers, AI assistants, and LLM search queries.
+        </p>
+
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
+          <div class="p-4 rounded-xl bg-zinc-900/60 border border-zinc-800 flex flex-col items-center justify-center">
+            <span class="text-sm font-bold text-zinc-200">TAAFT</span>
+            <span class="text-[10px] text-zinc-500 mt-1">There's An AI For That</span>
+          </div>
+          <div class="p-4 rounded-xl bg-zinc-900/60 border border-zinc-800 flex flex-col items-center justify-center">
+            <span class="text-sm font-bold text-zinc-200">Futurepedia</span>
+            <span class="text-[10px] text-zinc-500 mt-1">AI Tools Directory</span>
+          </div>
+          <div class="p-4 rounded-xl bg-zinc-900/60 border border-zinc-800 flex flex-col items-center justify-center">
+            <span class="text-sm font-bold text-zinc-200">Product Hunt</span>
+            <span class="text-[10px] text-zinc-500 mt-1">Featured Product</span>
+          </div>
+          <div class="p-4 rounded-xl bg-zinc-900/60 border border-zinc-800 flex flex-col items-center justify-center">
+            <span class="text-sm font-bold text-zinc-200">Toolify AI</span>
+            <span class="text-[10px] text-zinc-500 mt-1">Dating Assistants</span>
+          </div>
+          <div class="p-4 rounded-xl bg-zinc-900/60 border border-zinc-800 flex flex-col items-center justify-center col-span-2 sm:col-span-1">
+            <span class="text-sm font-bold text-zinc-200">TopAI Tools</span>
+            <span class="text-[10px] text-zinc-500 mt-1">Verified Platform</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-24 border-b border-zinc-900 bg-zinc-950/60 scroll-mt-16">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6">
+        
+        <div class="text-center mb-16">
+          <span class="text-xs font-semibold text-orange-400 uppercase tracking-widest block mb-2">Got questions?</span>
+          <h2 class="text-3xl font-extrabold text-white font-display">
+            Frequently Asked Questions
+          </h2>
+        </div>
+
+        <div class="space-y-4">
+          <details class="group p-5 rounded-2xl bg-zinc-900/50 border border-zinc-800">
+            <summary class="font-semibold text-sm text-zinc-200 cursor-pointer list-none flex justify-between items-center">
+              <span>What makes Wingman Bro different from general chat AI?</span>
+              <span class="transition group-open:rotate-180 text-zinc-400">▾</span>
+            </summary>
+            <div class="mt-3 text-xs text-zinc-400 leading-relaxed pt-2 border-t border-zinc-800/60">
+              General AI writes formal, essay-like responses that feel unnatural in dating chats. Wingman Bro is calibrated strictly for real dating apps: short, witty, punchy messages that match her energy and make replying fun.
+            </div>
+          </details>
+
+          <details class="group p-5 rounded-2xl bg-zinc-900/50 border border-zinc-800">
+            <summary class="font-semibold text-sm text-zinc-200 cursor-pointer list-none flex justify-between items-center">
+              <span>Are my screenshots and private messages saved?</span>
+              <span class="transition group-open:rotate-180 text-zinc-400">▾</span>
+            </summary>
+            <div class="mt-3 text-xs text-zinc-400 leading-relaxed pt-2 border-t border-zinc-800/60">
+              No. All conversation history is saved exclusively inside your browser's private local IndexedDB. We do not store your chat screenshots or conversation text on remote databases.
+            </div>
+          </details>
+
+          <details class="group p-5 rounded-2xl bg-zinc-900/50 border border-zinc-800">
+            <summary class="font-semibold text-sm text-zinc-200 cursor-pointer list-none flex justify-between items-center">
+              <span>How do I navigate between the Landing page and the Generator Tool?</span>
+              <span class="transition group-open:rotate-180 text-zinc-400">▾</span>
+            </summary>
+            <div class="mt-3 text-xs text-zinc-400 leading-relaxed pt-2 border-t border-zinc-800/60">
+              You can click <strong>"Launch Tool"</strong> in the top menu or hero button anytime to navigate directly to <code>/tool</code> without any hash anchors or page reloads. In the tool, click "Home" to return to the landing page.
+            </div>
+          </details>
+
+          <details class="group p-5 rounded-2xl bg-zinc-900/50 border border-zinc-800">
+            <summary class="font-semibold text-sm text-zinc-200 cursor-pointer list-none flex justify-between items-center">
+              <span>Can I use my own Google AI Studio API key?</span>
+              <span class="transition group-open:rotate-180 text-zinc-400">▾</span>
+            </summary>
+            <div class="mt-3 text-xs text-zinc-400 leading-relaxed pt-2 border-t border-zinc-800/60">
+              Yes! You can paste your own Gemini API key inside the app Settings. It will be stored locally in your browser for free, unlimited generations.
+            </div>
+          </details>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Final Call to Action -->
+    <section class="py-20 text-center">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white font-display mb-4">
+          Ready to upgrade your conversations?
+        </h2>
+        <p class="text-sm text-zinc-400 max-w-lg mx-auto mb-8">
+          Experience the dedicated AI dating assistant that gets real replies.
+        </p>
+        <a 
+          routerLink="/tool" 
+          class="inline-flex items-center gap-2 px-10 py-4 rounded-2xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-sm uppercase tracking-wider shadow-xl shadow-orange-600/30 transition-all cursor-pointer hover:scale-105 active:scale-95">
+          <span>Launch Wingman Bro Tool Now</span>
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-zinc-800/80 bg-zinc-950 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-6 pb-8 border-b border-zinc-900">
+        <div class="flex items-center gap-2">
+          <span class="text-lg font-bold font-display text-white">Wingman Bro</span>
+          <span class="text-xs text-zinc-500">· Your AI Wingman for Better Conversations</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-6 text-xs text-zinc-400">
+          <button (click)="scrollToSection('how-it-works')" class="hover:text-white transition-colors cursor-pointer">How to use</button>
+          <button (click)="scrollToSection('pricing')" class="hover:text-white transition-colors cursor-pointer">Pricing</button>
+          <button (click)="scrollToSection('features')" class="hover:text-white transition-colors cursor-pointer">Features</button>
+          <button (click)="scrollToSection('faq')" class="hover:text-white transition-colors cursor-pointer">FAQ</button>
+          <a routerLink="/tool" class="text-orange-400 hover:text-orange-300 font-semibold transition-colors">Launch Tool</a>
+        </div>
+      </div>
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-500 gap-4">
+        <p>&copy; 2026 Wingman Bro. Built for modern dating conversations.</p>
+        <p>Wingman Bro is an AI conversation assistant. All suggestions are advisory.</p>
+      </div>
+    </div>
+  </footer>
+
+</div>

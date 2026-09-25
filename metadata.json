@@ -1,6 +1,6 @@
 {
   "name": "Wingman Bro",
-  "description": "Your AI dating coach and roadmap manager for the global dating scene. Get witty replies for your chats and manage your goals effectively.",
+  "description": "The AI wingman for Tinder, Bumble & Hinge. Get witty replies, openers, and screenshot advice with your personal dating conversation assistant.",
   "requestFramePermissions": [
     "camera"
   ]

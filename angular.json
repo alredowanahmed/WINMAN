@@ -21,7 +21,12 @@
             "assets": [
               "robots.txt",
               "sitemap.xml",
-              "manifest.json"
+              "manifest.json",
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "assets"
+              }
             ]
           },
           "configurations": {

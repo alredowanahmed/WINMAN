@@ -7,6 +7,8 @@ export interface HistoryItem {
   userInput: string;
   imagePreviewUrl: string | null;
   responses: ApiResponse;
+  feedback?: 'helpful' | 'not-helpful';
+  feedbackReason?: string;
 }
 
 @Injectable({
@@ -16,6 +18,7 @@ export class HistoryService {
   private dbName = 'desi-wingman-db';
   private storeName = 'history';
   private db: IDBDatabase | null = null;
+  private lastInsertedId: number | null = null;
 
   private initDB(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
@@ -38,14 +41,40 @@ export class HistoryService {
     });
   }
 
-  async saveHistory(item: HistoryItem): Promise<void> {
+  async saveHistory(item: HistoryItem): Promise<number> {
     const db = await this.initDB();
     return new Promise((resolve, reject) => {
       const transaction = db.transaction(this.storeName, 'readwrite');
       const store = transaction.objectStore(this.storeName);
       const request = store.add(item);
-      request.onsuccess = () => resolve();
+      request.onsuccess = () => {
+        const id = request.result as number;
+        this.lastInsertedId = id;
+        resolve(id);
+      };
       request.onerror = () => reject(request.error);
+    });
+  }
+
+  async updateHistoryItem(id: number, updates: Partial<HistoryItem>): Promise<void> {
+    const db = await this.initDB();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(this.storeName, 'readwrite');
+      const store = transaction.objectStore(this.storeName);
+      const getRequest = store.get(id);
+
+      getRequest.onsuccess = () => {
+        const item = getRequest.result as HistoryItem;
+        if (!item) {
+          reject('Item not found');
+          return;
+        }
+        const updatedItem = { ...item, ...updates };
+        const putRequest = store.put(updatedItem);
+        putRequest.onsuccess = () => resolve();
+        putRequest.onerror = () => reject(putRequest.error);
+      };
+      getRequest.onerror = () => reject(getRequest.error);
     });
   }
 

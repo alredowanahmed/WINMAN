@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { GoogleGenAI, GenerateContentResponse, Type, ThinkingLevel } from "@google/genai";
+import { GoogleGenAI, GenerateContentResponse, Type } from "@google/genai";
 import { environment } from '../environments/environment';
 
 export interface ReplyOption {
   title: string;
   reply: string;
+  vibe?: string;
 }
 
 export interface ApiResponse {
@@ -15,17 +16,53 @@ export interface ApiResponse {
   providedIn: 'root',
 })
 export class GeminiService {
-  private ai: GoogleGenAI;
+  private ai!: GoogleGenAI;
+  private isUsingManualKey = false;
+
+  // Modern, fast, multimodal models in order of priority
+  private readonly preferredModels = [
+    'gemini-3.1-flash-lite',
+    'gemini-3-flash-preview',
+    'gemini-flash-latest'
+  ];
 
   constructor() {
     this.reinitialize();
   }
 
   reinitialize() {
-    const manualKey = typeof window !== 'undefined' ? localStorage.getItem('MANUAL_API_KEY') : null;
-    const apiKey = manualKey || environment.apiKey || (typeof process !== 'undefined' ? process.env.API_KEY : '');
+    let manualKey = typeof window !== 'undefined' ? localStorage.getItem('MANUAL_API_KEY') : null;
+    
+    // Purge known invalid placeholder keys
+    if (manualKey && (manualKey.includes('AIzaSyBzjMh8vmIGvlfAKd06813FWNPuAfej8YY') || manualKey === 'MY_GEMINI_API_KEY')) {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('MANUAL_API_KEY');
+      }
+      manualKey = null;
+    }
+
+    const defaultKey = environment.apiKey || (typeof process !== 'undefined' ? (process.env.GEMINI_API_KEY || process.env.API_KEY) : '');
+    const apiKey = manualKey || defaultKey;
+    this.isUsingManualKey = !!manualKey;
+
     if (apiKey) {
       this.ai = new GoogleGenAI({ apiKey });
+    }
+  }
+
+  private handleKeyError(error: any) {
+    const errorStr = error instanceof Error ? error.message : JSON.stringify(error);
+    const isPermissionOrKeyError = 
+      errorStr.includes('PERMISSION_DENIED') || 
+      errorStr.includes('403') || 
+      errorStr.includes('API_KEY_INVALID') || 
+      errorStr.includes('not valid');
+
+    // If a manual key failed, clear it and fall back to the built-in verified key
+    if (isPermissionOrKeyError && this.isUsingManualKey && typeof window !== 'undefined') {
+      console.warn('Manual API key lacks permission or is invalid. Falling back to default app key.');
+      localStorage.removeItem('MANUAL_API_KEY');
+      this.reinitialize();
     }
   }
 
@@ -36,25 +73,26 @@ export class GeminiService {
   }
 
   /**
-   * Analyzes text for inappropriate content using a separate Gemini call.
-   * Throws an error if the content is flagged as inappropriate.
+   * Analyzes text for inappropriate content using a safety check.
    */
   private async checkForInappropriateContent(text: string): Promise<void> {
     if (!text || text.trim() === '') {
-      return; // No need to check empty strings
+      return;
     }
 
-    const model = 'gemini-3-flash-preview';
-    const safetyPrompt = `You are a content safety moderator. Analyze the following text to determine if it contains any explicit, harassing, hateful, threatening, or otherwise inappropriate content that violates community guidelines. Respond with only a JSON object. The object must have a key "inappropriate" (boolean) and, if true, a "reason" (string).
-
-Text to analyze: "${text}"`;
+    const safetyPrompt = `Analyze the following text for severe harassment, explicit threats, or hate speech. Respond with JSON: {"inappropriate": boolean, "reason": string}.
+Text: "${text}"`;
 
     try {
+      if (!this.ai) {
+        this.reinitialize();
+      }
+      if (!this.ai) return;
+
       const response = await this.ai.models.generateContent({
-        model,
+        model: 'gemini-3.1-flash-lite',
         contents: { parts: [{ text: safetyPrompt }] },
         config: {
-          thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
           responseMimeType: 'application/json',
           responseSchema: {
             type: Type.OBJECT,
@@ -67,105 +105,138 @@ Text to analyze: "${text}"`;
         },
       });
 
-      const jsonText = response.text.trim();
+      const jsonText = response.text?.trim() || '{}';
       const safetyResult = JSON.parse(jsonText);
 
       if (safetyResult.inappropriate) {
-        console.warn(`Content flagged as inappropriate. Reason: ${safetyResult.reason}`);
         throw new Error('This content was flagged as inappropriate and cannot be processed. Please adhere to community guidelines.');
       }
     } catch (error: any) {
-      // If the error is the one we threw, re-throw it.
-      if (error.message.includes('inappropriate')) {
-          throw error;
+      if (error.message && error.message.includes('inappropriate')) {
+        throw error;
       }
-      console.error('Error during safety check:', error);
-      // Let it pass if the safety check itself fails, to not block users due to transient API issues.
+      // Non-blocking for network or permission errors
+      console.warn('Safety check skipped or passed:', error?.message || error);
     }
   }
 
-
+  /**
+   * Extracts text from an uploaded screenshot or chat image.
+   * Uses robust model fallback to prevent 403 / 503 / 404 errors.
+   */
   async getTextFromImage(base64Data: string, mimeType: string): Promise<string> {
-    const model = 'gemini-3-flash-preview';
     const imagePart = this.dataToGenerativePart(base64Data, mimeType);
-    const prompt = "Extract all text from the provided image, which is a screenshot of a chat. Focus on transcribing the last message sent by the other person. Return only the transcribed text, without any additional comments, labels, or explanations.";
+    const prompt = "Extract all text from the provided image, which is a screenshot of a chat. Focus on transcribing the last message sent by the other person. Return only the transcribed text, without any additional comments, labels, or explanations. If no text exists, return empty.";
 
-    try {
-      const response = await this.ai.models.generateContent({
-        model,
-        contents: { parts: [imagePart, { text: prompt }] },
-        config: {
-          thinkingConfig: { thinkingLevel: ThinkingLevel.LOW }
+    let lastError: any = null;
+
+    for (const model of this.preferredModels) {
+      try {
+        if (!this.ai) {
+          this.reinitialize();
         }
-      });
-      const extractedText = response.text.trim();
 
-      // Safety Check
-      await this.checkForInappropriateContent(extractedText);
-      
-      return extractedText;
-    } catch (error) {
-      console.error('Error processing image:', error);
-      if (error instanceof Error && error.message.includes('inappropriate')) {
-        throw error; // Re-throw the specific safety error
+        const response = await this.ai.models.generateContent({
+          model,
+          contents: { parts: [imagePart, { text: prompt }] },
+        });
+
+        const extractedText = response.text ? response.text.trim() : '';
+
+        // Run safety check on extracted text if present
+        if (extractedText) {
+          await this.checkForInappropriateContent(extractedText);
+        }
+
+        return extractedText;
+      } catch (error: any) {
+        lastError = error;
+        this.handleKeyError(error);
+
+        const errorStr = error instanceof Error ? error.message : JSON.stringify(error);
+        if (errorStr.includes('inappropriate')) {
+          throw error;
+        }
+
+        console.warn(`Model ${model} failed for image extraction:`, errorStr);
+        // Continue to next fallback model
       }
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      throw new Error(`Could not process the screenshot: ${errorMessage}`);
     }
+
+    // If all models failed, provide clean, friendly explanation
+    const errorMessage = lastError instanceof Error ? lastError.message : String(lastError);
+    if (errorMessage.includes('PERMISSION_DENIED') || errorMessage.includes('403') || errorMessage.includes('API_KEY_INVALID')) {
+      throw new Error('API key permission denied. Please verify your Gemini API key in Settings.');
+    }
+    throw new Error('Could not extract text from screenshot. Please try pasting the message directly.');
   }
 
-  async generateReplies(userInput: string, base64Data?: string | null, mimeType?: string | null, history?: any[]): Promise<ApiResponse> {
-    // Safety Check on user's direct text input
-    await this.checkForInappropriateContent(userInput);
+  /**
+   * Generates 3 calibrated dating replies based on user input, screenshot, and chosen vibe.
+   */
+  async generateReplies(
+    userInput: string,
+    base64Data?: string | null,
+    mimeType?: string | null,
+    history?: any[],
+    vibe: string = 'Playful',
+    mode: 'reply' | 'rewrite' | 'starter' = 'reply'
+  ): Promise<ApiResponse> {
+    if (!this.ai) {
+      this.reinitialize();
+    }
 
-    const model = 'gemini-3-flash-preview';
+    if (userInput) {
+      await this.checkForInappropriateContent(userInput);
+    }
 
-    const systemPrompt = `You are "Wingman Bro," an expert dating coach for the global dating scene. You are witty, culturally aware, and act as a supportive friend. Your goal is to help the user with replies for Tinder, Bumble, Hinge, etc.
+    let vibeSpecialization = '';
+    if (vibe.toLowerCase() === 'rizz') {
+      vibeSpecialization = `
+SPECIAL VIBE GUIDANCE FOR "RIZZ":
+- High charm, unspoken magnetism, effortless confidence, zero try-hard energy.
+- Use smooth lines, playful confidence, and subtle tension that makes the recipient blush, laugh, or lean in.
+- Never sound creepy, corny, or robotic. Keep it authentic and naturally charismatic.`;
+    }
 
-PRIME DIRECTIVE: LANGUAGE & SCRIPT MATCHING
-Your reply MUST match the linguistic style and language of the "Girl's" message provided by the user.
-1. Multilingual Support: If she writes in a specific language (English, Spanish, French, etc.) or a mix (like Spanglish or Banglish), you MUST reply in that same style.
-2. Script Matching: Use the same script (Latin, Cyrillic, Bengali, etc.) that she uses.
-3. Slang & Nuance: Use appropriate modern slang and cultural nuances based on the language detected.
+    let modeInstructions = `TASK: REPLY GENERATOR
+The user needs a reply to a message they received in a dating app or DM.
+The chosen primary vibe is: "${vibe}".${vibeSpecialization}
+Provide 3 distinct, high-impact reply options reflecting this vibe:
+Option 1: The "${vibe}" Core Option (Direct expression of the vibe)
+Option 2: The Playful / Banter Angle (Tease, witty observation, or banter)
+Option 3: The Smooth & Low-Pressure Angle (Effortless, casual escalation or intrigue)`;
 
-VISION/SCREENSHOT ANALYSIS PROTOCOL:
-If a screenshot is provided, you MUST perform a deep, nuanced analysis. This is critical.
-1.  **Identify her Messages:** Focus on the messages from her (typically gray/white bubbles).
-2.  **Analyze Timestamps for Pauses:** This is very important. Scrutinize the timestamps between messages. A long delay (hours) suggests lower interest or being busy, so your replies should be more casual. A quick reply suggests higher interest, allowing for more engaging or playful responses.
-3.  **Analyze Message Length & Effort:** Does she write full sentences or just one-word answers? Match her effort. Low effort from her means you should suggest cooler, less invested replies.
-4.  **Detect Engagement Cues (Crucial):**
-    - **Typing Indicators:** Actively look for a "typing..." bubble or animation in the screenshot. This is a very strong signal of active engagement. If you see it, the user can be more forward or playful.
-    - **Read Receipts:** Look for 'Seen', 'Read', or double-tick indicators. If the user's last message was seen a long time ago with no reply, this is a sign of disinterest. Your "Cool/Casual" option should reflect this by being detached or suggesting ending the conversation.
-5.  **Understand the Context:** Read the last 3-4 messages to grasp the conversation's flow, topic, and emotional tone. Use all these visual cues to refine the tone and strategy of your 3 reply options.
+    const systemPrompt = `You are "Wingman Bro," a world-class AI dating and conversation assistant. You help people stop overthinking and send witty, confident, and natural replies for Tinder, Bumble, Hinge, Instagram DMs, and social chats.
 
-RESPONSE STRATEGY:
-For EVERY input, you MUST provide exactly 3 distinct options.
-1. Option 1: The Playful/Funny ("Rizz" Option) - Tease her, be sarcastic, make her laugh.
-2. Option 2: The Sweet/Charming ("Lover Boy" Option) - Show genuine interest, compliment, escalate slightly.
-3. Option 3: The Cool/Casual ("Mystery" Option) - Match her energy, play it cool, be brief.
+PRIMARY DIRECTIVES:
+1. Tone & Style: Natural, confident, witty, and socially calibrated. Never sound needy, cheesy, or overly scripted.
+2. Selected Vibe: "${vibe}". Ensure all options honor this vibe while providing distinct angles.
+3. Language & Script Matching: Match the exact language, dialect, and script used in the incoming message (English, Bengali, Spanish, French, Banglish, Spanglish, etc.) including local modern slang.
+4. Social Calibration:
+   - Match the other person's effort and length.
+   - If a screenshot is provided, analyze pauses, timestamps, and message flow.
+   - Keep replies concise (1-2 sentences max), punchy, and easy to respond to.
+5. Guardrails: Absolutely NO harassment, creepiness, desperation, or offensive content.
 
-GUARDRAILS:
-- NO harassment, creepy, or overly sexual replies.
-- NO desperate replies. Suggest a dignified exit if she's ghosting.
+${modeInstructions}
 
-The user has provided the following context. Analyze it and generate the 3 reply options.`;
+Return exactly 3 options in JSON format.`;
     
     const contents: any[] = [{ text: systemPrompt }];
     
-    // Add history context if available
     if (history && history.length > 0) {
-      let historyText = "--- PAST CONVERSATION HISTORY (Context for you to remember) ---\n";
-      // Take up to the last 4 interactions to give context without overloading
-      const recentHistory = history.slice(0, 4).reverse();
+      let historyText = "--- RECENT CONVERSATION HISTORY (Context) ---\n";
+      const recentHistory = history.slice(0, 3).reverse();
       for (const item of recentHistory) {
         if (item.userInput) {
-          historyText += `She previously said: "${item.userInput}"\n`;
-        } else {
-          historyText += `User previously uploaded a screenshot.\n`;
+          historyText += `Context: "${item.userInput}"\n`;
         }
-        historyText += `You suggested: ${item.responses.options.map((o: any) => o.reply).join(' | ')}\n\n`;
+        if (item.responses?.options) {
+          historyText += `Suggested: ${item.responses.options.map((o: any) => o.reply).join(' | ')}\n\n`;
+        }
       }
-      historyText += "--- END OF HISTORY ---\nKeep this past context in mind to ensure continuity and avoid repeating the exact same jokes if this is the same conversation.\n\n";
+      historyText += "--- END OF HISTORY ---\n";
       contents.push({ text: historyText });
     }
 
@@ -175,55 +246,71 @@ The user has provided the following context. Analyze it and generate the 3 reply
     }
 
     if (userInput) {
-      contents.push({ text: `Her CURRENT message text: "${userInput}"`});
+      contents.push({ text: `Current user input: "${userInput}"`});
     }
 
     if (base64Data && !userInput) {
-        contents.push({ text: "Analyze the CURRENT screenshot and provide replies to the last message from her."});
+      contents.push({ text: "Analyze the screenshot context and provide the best replies to the latest message."});
     }
 
-    try {
-      const response: GenerateContentResponse = await this.ai.models.generateContent({
-        model,
-        contents: { parts: contents },
-        config: {
-          thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
-          responseMimeType: "application/json",
-          responseSchema: {
-            type: Type.OBJECT,
-            properties: {
-              options: {
-                type: Type.ARRAY,
-                items: {
-                  type: Type.OBJECT,
-                  properties: {
-                    title: { type: Type.STRING },
-                    reply: { type: Type.STRING }
-                  },
-                  required: ["title", "reply"]
-                }
-              }
-            },
-            required: ["options"]
-          }
+    let lastError: any = null;
+
+    for (const model of this.preferredModels) {
+      try {
+        if (!this.ai) {
+          this.reinitialize();
         }
-      });
-      
-      const jsonText = response.text.trim();
-      const parsedResponse = JSON.parse(jsonText);
 
-      if (!parsedResponse.options || parsedResponse.options.length < 1) {
-        throw new Error('Wingman is speechless... Try rephrasing or a different screenshot.');
-      }
-      return parsedResponse as ApiResponse;
+        const response: GenerateContentResponse = await this.ai.models.generateContent({
+          model,
+          contents: { parts: contents },
+          config: {
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: Type.OBJECT,
+              properties: {
+                options: {
+                  type: Type.ARRAY,
+                  items: {
+                    type: Type.OBJECT,
+                    properties: {
+                      title: { type: Type.STRING },
+                      reply: { type: Type.STRING }
+                    },
+                    required: ["title", "reply"]
+                  }
+                }
+              },
+              required: ["options"]
+            }
+          }
+        });
+        
+        const jsonText = response.text ? response.text.trim() : '{}';
+        const parsedResponse = JSON.parse(jsonText);
 
-    } catch (error) {
-      console.error('Error calling Gemini API:', error);
-      // Check if it's our custom safety error
-      if (error instanceof Error && error.message.includes('inappropriate')) {
+        if (!parsedResponse.options || parsedResponse.options.length < 1) {
+          throw new Error('Wingman is thinking... Please try rephrasing or provide another screenshot.');
+        }
+        return parsedResponse as ApiResponse;
+
+      } catch (error: any) {
+        lastError = error;
+        this.handleKeyError(error);
+
+        const errorStr = error instanceof Error ? error.message : JSON.stringify(error);
+        if (errorStr.includes('inappropriate')) {
           throw error;
+        }
+
+        console.warn(`Model ${model} failed for reply generation:`, errorStr);
       }
-      throw new Error('Failed to get advice from Wingman. The model might be busy, please try again.');
     }
+
+    const errorMessage = lastError instanceof Error ? lastError.message : String(lastError);
+    if (errorMessage.includes('PERMISSION_DENIED') || errorMessage.includes('403') || errorMessage.includes('API_KEY_INVALID')) {
+      throw new Error('API key permission denied. Please verify your Gemini API key in Settings.');
+    }
+    throw new Error('Failed to get advice from Wingman Bro. Please check your connection or API key and try again.');
   }
 }
