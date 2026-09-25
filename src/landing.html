@@ -182,7 +182,7 @@
             <div class="text-3xl font-extrabold text-orange-500 font-display mb-4">Step 02</div>
             <h3 class="text-lg font-bold text-white mb-2">Choose your conversation vibe</h3>
             <p class="text-sm text-zinc-400 leading-relaxed">
-              Pick the energy you want: <strong>Rizz</strong>, <strong>Playful</strong>, <strong>Funny</strong>, <strong>Flirty</strong>, <strong>Confident</strong>, <strong>Casual</strong>, <strong>Charming</strong>, or <strong>Direct</strong>.
+              Pick the energy you want: <strong>Rizz</strong>, <strong>Magnetic</strong>, <strong>Smooth</strong>, <strong>Witty</strong>, <strong>Playful</strong>, <strong>Flirty</strong>, <strong>Confident</strong>, or <strong>Direct</strong>.
             </p>
           </div>
 
@@ -330,9 +330,9 @@
           </div>
 
           <div class="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800">
-            <h3 class="text-base font-bold text-white mb-2">8 Conversation Vibes</h3>
+            <h3 class="text-base font-bold text-white mb-2">11 Conversation Vibes</h3>
             <p class="text-xs text-zinc-400 leading-relaxed">
-              Calibrate to your preferred personality: Rizz, Playful, Funny, Flirty, Confident, Casual, Charming, or Direct.
+              Calibrate to your preferred personality: Rizz, Magnetic, Smooth, Witty, Playful, Flirty, Confident, Charming, and more.
             </p>
           </div>
 
@@ -399,57 +399,169 @@
       </div>
     </section>
 
-    <!-- FAQ Section -->
-    <section id="faq" class="py-24 border-b border-zinc-900 bg-zinc-950/60 scroll-mt-16">
-      <div class="max-w-3xl mx-auto px-4 sm:px-6">
+    <!-- Dedicated Interactive FAQ Section with SEO Architecture -->
+    <section id="faq" class="py-24 border-b border-zinc-900 bg-zinc-950/70 scroll-mt-16 relative overflow-hidden">
+      <!-- Ambient Glow Behind FAQ -->
+      <div class="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-orange-600/5 blur-[120px] rounded-full"></div>
+
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
         
-        <div class="text-center mb-16">
-          <span class="text-xs font-semibold text-orange-400 uppercase tracking-widest block mb-2">Got questions?</span>
-          <h2 class="text-3xl font-extrabold text-white font-display">
+        <!-- Section Header -->
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-[11px] font-semibold uppercase tracking-widest mb-3">
+            <span>✨ Knowledge Base</span>
+            <span class="text-zinc-600">•</span>
+            <span>Schema.org Verified</span>
+          </div>
+          <h2 class="text-3xl sm:text-5xl font-extrabold text-white font-display tracking-tight mb-4">
             Frequently Asked Questions
           </h2>
+          <p class="text-sm sm:text-base text-zinc-400 leading-relaxed">
+            Everything you need to know about the #1 AI wingman for Tinder, Bumble, Hinge, and Instagram conversations.
+          </p>
         </div>
 
-        <div class="space-y-4">
-          <details class="group p-5 rounded-2xl bg-zinc-900/50 border border-zinc-800">
-            <summary class="font-semibold text-sm text-zinc-200 cursor-pointer list-none flex justify-between items-center">
-              <span>What makes Wingman Bro different from general chat AI?</span>
-              <span class="transition group-open:rotate-180 text-zinc-400">▾</span>
-            </summary>
-            <div class="mt-3 text-xs text-zinc-400 leading-relaxed pt-2 border-t border-zinc-800/60">
-              General AI writes formal, essay-like responses that feel unnatural in dating chats. Wingman Bro is calibrated strictly for real dating apps: short, witty, punchy messages that match her energy and make replying fun.
-            </div>
-          </details>
+        <!-- Real-Time Search & Controls Bar -->
+        <div class="mb-8 space-y-4">
+          <div class="relative">
+            <input 
+              type="text"
+              [value]="searchQuery()"
+              (input)="onSearchInput($event)"
+              placeholder="Search questions (e.g. 'Rizz', 'privacy', 'screenshot', 'Gemini key')..."
+              class="w-full bg-zinc-900/90 border border-zinc-800 focus:border-orange-500/60 rounded-2xl px-5 py-3.5 pl-12 text-sm text-zinc-100 placeholder:text-zinc-500 outline-none transition-all shadow-inner"
+              aria-label="Search frequently asked questions"
+            />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-zinc-500 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            @if (searchQuery()) {
+              <button 
+                (click)="clearSearch()" 
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-zinc-400 hover:text-white bg-zinc-800 px-2 py-1 rounded-lg transition-colors cursor-pointer"
+                title="Clear search">
+                Clear
+              </button>
+            }
+          </div>
 
-          <details class="group p-5 rounded-2xl bg-zinc-900/50 border border-zinc-800">
-            <summary class="font-semibold text-sm text-zinc-200 cursor-pointer list-none flex justify-between items-center">
-              <span>Are my screenshots and private messages saved?</span>
-              <span class="transition group-open:rotate-180 text-zinc-400">▾</span>
-            </summary>
-            <div class="mt-3 text-xs text-zinc-400 leading-relaxed pt-2 border-t border-zinc-800/60">
-              No. All conversation history is saved exclusively inside your browser's private local IndexedDB. We do not store your chat screenshots or conversation text on remote databases.
+          <!-- Category Filter Pills & Expand/Collapse Toggle -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+            <div class="flex flex-wrap items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+              @for (cat of categories; track cat.id) {
+                <button 
+                  (click)="setCategory(cat.id)"
+                  class="px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer"
+                  [class.bg-orange-600]="selectedCategory() === cat.id"
+                  [class.text-white]="selectedCategory() === cat.id"
+                  [class.shadow-md]="selectedCategory() === cat.id"
+                  [class.shadow-orange-600/25]="selectedCategory() === cat.id"
+                  [class.bg-zinc-900]="selectedCategory() !== cat.id"
+                  [class.text-zinc-400]="selectedCategory() !== cat.id"
+                  [class.border]="selectedCategory() !== cat.id"
+                  [class.border-zinc-800]="selectedCategory() !== cat.id"
+                  [class.hover:text-zinc-200]="selectedCategory() !== cat.id"
+                  [class.hover:border-zinc-700]="selectedCategory() !== cat.id">
+                  {{ cat.label }}
+                </button>
+              }
             </div>
-          </details>
 
-          <details class="group p-5 rounded-2xl bg-zinc-900/50 border border-zinc-800">
-            <summary class="font-semibold text-sm text-zinc-200 cursor-pointer list-none flex justify-between items-center">
-              <span>How do I navigate between the Landing page and the Generator Tool?</span>
-              <span class="transition group-open:rotate-180 text-zinc-400">▾</span>
-            </summary>
-            <div class="mt-3 text-xs text-zinc-400 leading-relaxed pt-2 border-t border-zinc-800/60">
-              You can click <strong>"Launch Tool"</strong> in the top menu or hero button anytime to navigate directly to <code>/tool</code> without any hash anchors or page reloads. In the tool, click "Home" to return to the landing page.
+            <div class="flex items-center gap-2 text-xs text-zinc-400 shrink-0">
+              <button 
+                (click)="expandAll()" 
+                class="hover:text-orange-400 transition-colors cursor-pointer px-2 py-1 rounded-lg bg-zinc-900/60 border border-zinc-800 hover:border-zinc-700">
+                Expand All
+              </button>
+              <span class="text-zinc-600">|</span>
+              <button 
+                (click)="collapseAll()" 
+                class="hover:text-orange-400 transition-colors cursor-pointer px-2 py-1 rounded-lg bg-zinc-900/60 border border-zinc-800 hover:border-zinc-700">
+                Collapse All
+              </button>
             </div>
-          </details>
+          </div>
+        </div>
 
-          <details class="group p-5 rounded-2xl bg-zinc-900/50 border border-zinc-800">
-            <summary class="font-semibold text-sm text-zinc-200 cursor-pointer list-none flex justify-between items-center">
-              <span>Can I use my own Google AI Studio API key?</span>
-              <span class="transition group-open:rotate-180 text-zinc-400">▾</span>
-            </summary>
-            <div class="mt-3 text-xs text-zinc-400 leading-relaxed pt-2 border-t border-zinc-800/60">
-              Yes! You can paste your own Gemini API key inside the app Settings. It will be stored locally in your browser for free, unlimited generations.
+        <!-- FAQ Accordion List -->
+        <div class="space-y-3.5">
+          @for (faq of filteredFaqs(); track faq.id) {
+            <div class="rounded-2xl bg-zinc-900/50 border border-zinc-800/90 hover:border-zinc-700/80 transition-all overflow-hidden shadow-xs">
+              <button 
+                (click)="toggleFaq(faq.id)" 
+                class="w-full p-5 sm:p-6 text-left flex items-start justify-between gap-4 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded-2xl"
+                [attr.aria-expanded]="isFaqExpanded(faq.id)">
+                <div class="flex items-start gap-3.5">
+                  <span class="px-2 py-0.5 mt-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-zinc-800/80 text-orange-400 border border-zinc-700/60 shrink-0">
+                    {{ faq.categoryLabel }}
+                  </span>
+                  <h3 class="font-bold text-sm sm:text-base text-zinc-100 leading-snug">
+                    {{ faq.question }}
+                  </h3>
+                </div>
+                <div 
+                  class="w-8 h-8 rounded-xl bg-zinc-800/60 flex items-center justify-center text-zinc-400 shrink-0 transition-transform duration-200"
+                  [class.rotate-180]="isFaqExpanded(faq.id)">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </button>
+
+              @if (isFaqExpanded(faq.id)) {
+                <div class="px-5 sm:px-6 pb-6 pt-1 text-xs sm:text-sm text-zinc-300 leading-relaxed border-t border-zinc-800/40 animate-in fade-in duration-200">
+                  <p class="mb-3 text-zinc-300">
+                    {{ faq.answer }}
+                  </p>
+
+                  @if (faq.highlights && faq.highlights.length > 0) {
+                    <div class="mt-3.5 p-3.5 rounded-xl bg-zinc-950/70 border border-zinc-800/70 space-y-2">
+                      <div class="text-[11px] font-bold text-orange-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                        <span>Key Takeaways</span>
+                      </div>
+                      <ul class="space-y-1.5 pl-1">
+                        @for (highlight of faq.highlights; track highlight) {
+                          <li class="flex items-start gap-2 text-xs text-zinc-300">
+                            <span class="text-orange-500 font-bold">•</span>
+                            <span>{{ highlight }}</span>
+                          </li>
+                        }
+                      </ul>
+                    </div>
+                  }
+                </div>
+              }
             </div>
-          </details>
+          } @empty {
+            <div class="p-12 text-center rounded-2xl bg-zinc-900/30 border border-dashed border-zinc-800">
+              <p class="text-sm text-zinc-400 mb-3">No matching questions found for "{{ searchQuery() }}".</p>
+              <button 
+                (click)="clearSearch()" 
+                class="px-4 py-2 rounded-xl text-xs font-semibold bg-orange-600 hover:bg-orange-500 text-white transition-colors cursor-pointer">
+                Reset Search Filter
+              </button>
+            </div>
+          }
+        </div>
+
+        <!-- Help / CTA Card at Bottom of FAQ -->
+        <div class="mt-12 p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-zinc-900/90 to-zinc-900/50 border border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div class="text-center sm:text-left">
+            <h4 class="text-lg font-bold text-white font-display mb-1">
+              Still have a specific question about your chat?
+            </h4>
+            <p class="text-xs text-zinc-400 max-w-md">
+              Try the tool directly with your actual conversation text or screenshot. It's instant, free, and completely confidential.
+            </p>
+          </div>
+          <a 
+            routerLink="/tool" 
+            class="px-6 py-3 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-orange-600/30 transition-all cursor-pointer hover:scale-105 active:scale-95 shrink-0">
+            Launch Free Tool →
+          </a>
         </div>
 
       </div>

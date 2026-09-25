@@ -42,7 +42,8 @@ export class Tool implements OnInit {
     'Too formal',
     'Missed conversation context',
     'Wanted shorter reply',
-    'Needs more rizz'
+    'Needs more rizz',
+    'Too aggressive'
   ];
 
   // Vibe Guide Definitions
@@ -63,6 +64,30 @@ export class Tool implements OnInit {
       tagline: 'Effortless Charisma',
       description: 'Maximum unspoken magnetism and effortless charisma. Smooth, confident, and irresistible without trying too hard.',
       example: '"Are you always this captivating, or did you turn it up just for me?"'
+    },
+    {
+      id: 'Magnetic',
+      label: 'Magnetic',
+      icon: '🧲',
+      tagline: 'Irresistible Pull',
+      description: 'Intriguing, tension-building mystery that pulls her attention right to you without revealing too much.',
+      example: '"I could tell you, but where\'s the fun in spoiling the mystery so soon?"'
+    },
+    {
+      id: 'Smooth',
+      label: 'Smooth',
+      icon: '🍸',
+      tagline: 'Velvet & Poised',
+      description: 'Calm, effortless composure with zero awkwardness—glides seamlessly from banter into genuine chemistry.',
+      example: '"You have great taste. Let\'s see if your banter holds up over drinks this Thursday."'
+    },
+    {
+      id: 'Witty',
+      label: 'Witty',
+      icon: '💡',
+      tagline: 'Razor-Sharp Banter',
+      description: 'Lightning-fast comebacks and clever wordplay that showcase mental agility and keep her on her toes.',
+      example: '"Careful now, you\'re one message away from becoming my favorite notification."'
     },
     {
       id: 'Playful',
@@ -129,6 +154,9 @@ export class Tool implements OnInit {
 
   readonly availableVibes: string[] = [
     'Rizz',
+    'Magnetic',
+    'Smooth',
+    'Witty',
     'Playful',
     'Funny',
     'Flirty',

@@ -191,12 +191,31 @@ Text: "${text}"`;
     }
 
     let vibeSpecialization = '';
-    if (vibe.toLowerCase() === 'rizz') {
+    const vLower = vibe.toLowerCase();
+    if (vLower === 'rizz') {
       vibeSpecialization = `
 SPECIAL VIBE GUIDANCE FOR "RIZZ":
 - High charm, unspoken magnetism, effortless confidence, zero try-hard energy.
 - Use smooth lines, playful confidence, and subtle tension that makes the recipient blush, laugh, or lean in.
 - Never sound creepy, corny, or robotic. Keep it authentic and naturally charismatic.`;
+    } else if (vLower === 'magnetic') {
+      vibeSpecialization = `
+SPECIAL VIBE GUIDANCE FOR "MAGNETIC":
+- High intrigue, captivating allure, and tension-building mystery that pulls her into the conversation.
+- Never over-explain or reveal everything at once. Leave an irresistible conversational hook.
+- Calm, seductive self-possession and high status with zero desperation.`;
+    } else if (vLower === 'smooth') {
+      vibeSpecialization = `
+SPECIAL VIBE GUIDANCE FOR "SMOOTH":
+- Velvet cadence, calm composure, and effortless charm without any hesitation or awkward pauses.
+- Seamlessly transitions conversation from casual banter into genuine romantic interest or date plans.
+- Naturally poised, flattering without seeking validation, and suave.`;
+    } else if (vLower === 'witty') {
+      vibeSpecialization = `
+SPECIAL VIBE GUIDANCE FOR "WITTY":
+- Lightning-fast verbal agility, clever banter, intellectual playfulness, and sharp observational humor.
+- Playful teasing and unexpected callbacks that keep her smiling and on her toes.
+- Crisp, intelligent, and delightfully fun to text back.`;
     }
 
     let modeInstructions = `TASK: REPLY GENERATOR
