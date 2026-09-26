@@ -1,5 +1,21 @@
 {
   "routes": [
+    {
+      "src": "^/sitemap\\.xml$",
+      "headers": {
+        "Content-Type": "application/xml; charset=utf-8",
+        "Cache-Control": "public, max-age=0, must-revalidate"
+      },
+      "dest": "/sitemap.xml"
+    },
+    {
+      "src": "^/robots\\.txt$",
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "public, max-age=0, must-revalidate"
+      },
+      "dest": "/robots.txt"
+    },
     { "handle": "filesystem" },
     { "src": "/.*", "dest": "/index.html" }
   ]

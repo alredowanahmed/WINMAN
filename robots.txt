@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /admin
 
-Sitemap: https://wingmanbro.com/sitemap.xml
+Sitemap: https://wingman-bro.vercel.app/sitemap.xml
