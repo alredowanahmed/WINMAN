@@ -18,6 +18,10 @@
         <button (click)="scrollToSection('features')" class="hover:text-white transition-colors cursor-pointer">
           Features
         </button>
+        <button (click)="scrollToSection('sentiment-analysis')" class="hover:text-white transition-colors cursor-pointer flex items-center gap-1">
+          <span>Sentiment Trend</span>
+          <span class="px-1.5 py-0.2 rounded bg-orange-500/20 text-orange-400 text-[10px] font-mono">Recharts</span>
+        </button>
         <button (click)="scrollToSection('pricing')" class="hover:text-white transition-colors cursor-pointer">
           Pricing & Terms
         </button>
@@ -75,6 +79,12 @@
           (click)="scrollToSection('features')" 
           class="w-full text-left py-2.5 px-3 rounded-lg text-sm font-medium text-zinc-300 hover:bg-zinc-900 hover:text-white transition-colors">
           Features
+        </button>
+        <button 
+          (click)="scrollToSection('sentiment-analysis')" 
+          class="w-full text-left py-2.5 px-3 rounded-lg text-sm font-medium text-zinc-300 hover:bg-zinc-900 hover:text-white transition-colors flex items-center justify-between">
+          <span>Sentiment Trend Analysis</span>
+          <span class="px-2 py-0.5 rounded bg-orange-500/20 text-orange-400 text-[10px] font-mono">Recharts</span>
         </button>
         <button 
           (click)="scrollToSection('pricing')" 
@@ -356,7 +366,40 @@
               Track personal dating milestones: updating profile photos, asking her out, or planning dates.
             </p>
           </div>
+
+          <div class="p-6 rounded-2xl bg-zinc-900/60 border border-orange-500/40 shadow-lg relative overflow-hidden group">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-base font-bold text-white">Response Sentiment Analysis</h3>
+              <span class="px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 text-[10px] font-mono font-bold">Recharts</span>
+            </div>
+            <p class="text-xs text-zinc-400 leading-relaxed">
+              Track how conversation positivity shifts over time across message turns, identifying chemistry spikes and preventing ghosting.
+            </p>
+          </div>
         </div>
+
+      </div>
+    </section>
+
+    <!-- Response Sentiment Analysis Showcase Section -->
+    <section id="sentiment-analysis" class="py-24 border-b border-zinc-900 bg-zinc-950/80 scroll-mt-16">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6">
+        
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <span class="text-xs font-semibold text-orange-400 uppercase tracking-widest block mb-2">Live Trend Visualization</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white font-display">
+            Response Sentiment Analysis
+          </h2>
+          <p class="text-sm text-zinc-400 mt-3 leading-relaxed">
+            See how conversational positivity shifts over time across real Tinder, Bumble, and Hinge threads with our live Recharts trend curve.
+          </p>
+        </div>
+
+        <app-sentiment-analysis-view 
+          [canClose]="false"
+          [activeVibe]="'Rizz'"
+          (applyToMainChat)="onApplySentimentScenario($event)"
+        />
 
       </div>
     </section>

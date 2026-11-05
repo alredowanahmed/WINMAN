@@ -14,17 +14,29 @@
         </span>
       </a>
 
-      <!-- Subtle Settings Icon -->
-      <button 
-        (click)="toggleSettings()" 
-        class="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-900 transition-colors"
-        title="API Settings"
-        aria-label="Settings">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-      </button>
+      <!-- Header Actions -->
+      <div class="flex items-center gap-2">
+        <button 
+          (click)="toggleSentimentAnalysis()" 
+          class="px-2.5 py-1.5 rounded-xl text-xs font-semibold border border-zinc-800 bg-zinc-900/90 hover:bg-zinc-800 hover:border-orange-500/50 text-zinc-300 hover:text-white transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+          title="Response Sentiment Analysis Chart"
+          aria-label="Sentiment Analysis">
+          <span class="text-xs">📊</span>
+          <span class="hidden sm:inline">Sentiment Trend</span>
+        </button>
+
+        <!-- Subtle Settings Icon -->
+        <button 
+          (click)="toggleSettings()" 
+          class="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-900 transition-colors"
+          title="API Settings"
+          aria-label="Settings">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </button>
+      </div>
 
     </div>
   </header>
@@ -208,6 +220,17 @@
         </svg>
       }
     </button>
+
+    <!-- Sentiment Analysis Quick Link -->
+    <div class="flex items-center justify-center gap-2 mb-6 -mt-3 text-xs text-zinc-400">
+      <span>Curious how conversation positivity shifts?</span>
+      <button 
+        (click)="openSentimentWithCurrentChat()"
+        class="text-orange-400 hover:text-orange-300 font-semibold underline underline-offset-4 cursor-pointer inline-flex items-center gap-1">
+        <span>Sentiment Analysis</span>
+        <span>📊</span>
+      </button>
+    </div>
 
     <!-- Error Banner -->
     @if (error()) {
@@ -413,6 +436,32 @@
           </div>
         </div>
 
+        <!-- Response Sentiment Analysis Quick Card -->
+        <div class="mt-4 p-4 rounded-2xl bg-zinc-900/80 border border-zinc-800 shadow-xl backdrop-blur-md">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-orange-600/20 text-orange-400 border border-orange-500/30 flex items-center justify-center text-lg shrink-0">
+                📊
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold text-white tracking-tight">Response Sentiment Analysis</span>
+                  <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[10px] font-mono font-semibold">+38% Shift</span>
+                </div>
+                <p class="text-[11px] text-zinc-400 mt-0.5 leading-snug">
+                  See how sending this calibrated reply spikes thread positivity on the live Recharts trend curve.
+                </p>
+              </div>
+            </div>
+            <button
+              (click)="openSentimentWithCurrentChat()"
+              class="w-full sm:w-auto px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-semibold text-xs transition-all shadow-md shadow-orange-600/20 cursor-pointer flex items-center justify-center gap-1.5 shrink-0">
+              <span>View Trend Chart</span>
+              <span>📈</span>
+            </button>
+          </div>
+        </div>
+
       </section>
     }
 
@@ -489,6 +538,20 @@
             </button>
           </div>
         </div>
+      </div>
+    </div>
+  }
+
+  <!-- Response Sentiment Analysis Modal Dialog -->
+  @if (showSentimentAnalysis()) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md overflow-y-auto">
+      <div class="w-full max-w-2xl my-auto animate-in zoom-in-95 duration-200 py-6">
+        <app-sentiment-analysis-view 
+          [canClose]="true"
+          [activeVibe]="selectedVibe()"
+          (close)="showSentimentAnalysis.set(false)"
+          (applyToMainChat)="applySentimentScenario($event)"
+        />
       </div>
     </div>
   }

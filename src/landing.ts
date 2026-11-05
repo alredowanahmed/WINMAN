@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { SentimentAnalysisView } from './components/sentiment-analysis-view';
 
 export interface FaqItem {
   id: string;
@@ -13,12 +14,16 @@ export interface FaqItem {
 
 @Component({
   selector: 'app-landing',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, SentimentAnalysisView],
   templateUrl: './landing.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Landing {
   private router = inject(Router);
+
+  onApplySentimentScenario(scenarioId: string) {
+    this.router.navigate(['/tool']);
+  }
 
   mobileMenuOpen = signal<boolean>(false);
   selectedCategory = signal<string>('all');

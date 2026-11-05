@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "simple-issue-description": {
+      "source": "every-app/open-seo",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/simple-issue-description/SKILL.md",
+      "computedHash": "33df6fd770cd2438507b221db8de53cb57f19ba5ace34a569fe7799e62a64fc0"
+    }
+  }
+}

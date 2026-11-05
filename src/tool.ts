@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { GeminiService, ApiResponse } from './services/gemini.service';
 import { HistoryService } from './services/history.service';
+import { SentimentAnalysisView } from './components/sentiment-analysis-view';
 
 @Component({
   selector: 'app-tool',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, SentimentAnalysisView],
   templateUrl: './tool.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -15,6 +16,9 @@ export class Tool implements OnInit {
   private geminiService = inject(GeminiService);
   private historyService = inject(HistoryService);
   private router = inject(Router);
+
+  // Response Sentiment Analysis State
+  showSentimentAnalysis = signal(false);
 
   // Core Generator State
   userInput = signal('');
@@ -179,6 +183,32 @@ export class Tool implements OnInit {
   async ngOnInit() {
     this.checkApiKey();
     this.loadManualKey();
+    if (this.router.url.includes('sentiment')) {
+      this.showSentimentAnalysis.set(true);
+    }
+  }
+
+  toggleSentimentAnalysis(): void {
+    this.showSentimentAnalysis.update(v => !v);
+  }
+
+  openSentimentWithCurrentChat(): void {
+    this.showSentimentAnalysis.set(true);
+  }
+
+  applySentimentScenario(scenarioId: string): void {
+    if (scenarioId === 'tinder-hey-rescue') {
+      this.userInput.set('hey');
+      this.selectedVibe.set('Playful');
+    } else if (scenarioId === 'bumble-trick-question') {
+      this.userInput.set('What is a guy like you actually doing on Bumble? Be honest.');
+      this.selectedVibe.set('Rizz');
+    } else if (scenarioId === 'hinge-food-banter') {
+      this.userInput.set('If you say you add heavy cream I am unmatching you right this second haha');
+      this.selectedVibe.set('Confident');
+    }
+    this.showSentimentAnalysis.set(false);
+    this.getHelp();
   }
 
   selectVibe(vibe: string): void {

@@ -11,5 +11,6 @@ export const routes: Routes = [
   { path: 'roadmap', component: Tool },
   { path: 'history', component: Tool },
   { path: 'settings', component: Tool },
+  { path: 'sentiment', component: Tool },
   { path: '**', redirectTo: '' }
 ];
